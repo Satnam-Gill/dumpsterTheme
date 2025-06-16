@@ -4,12 +4,20 @@ import blogData from "@/components/Content/blogs.json";
 import BlogPosts from "../components/Widgets/BlogPosts";
 import ContactInfo from "@/components/Content/ContactInfo.json";
 import Navbar from "../components/Navbar";
+import blogsMetas from "@/components/Content/location.json"
 
 export async function generateMetadata() {
+  const meta = JSON.parse(
+    JSON.stringify(blogsMetas.blogMetas)
+      .split("[location]")
+      .join(ContactInfo.location)
+      .split("[phone]")
+      .join(ContactInfo.No),
+  );
   return {
-    title: "Protect Your Home and Business with Trusted Roofing Services",
+    title: meta.metaTitle,
     description:
-      "With decades of experience, we ensure your roof protects your home or business while delivering superior craftsmanship and care.",
+      meta.metaDescription,
     alternates: {
       canonical: `${ContactInfo.baseUrl}blogs`,
     },
@@ -37,9 +45,6 @@ function groupAndSortBycatagory(data: any) {
   return sortedOutput;
 }
 const page = async () => {
-  // const data: any = await fetch ("https://api.npoint.io/3702f240e7018bd24e18");
-  // const jsonData = await data.json();
-  // console.log (jsonData);
   const sortedDataBycatagory = groupAndSortBycatagory(blogData);
   const catagorys = Object.keys(sortedDataBycatagory);
   return (
