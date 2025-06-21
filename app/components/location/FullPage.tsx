@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import data1 from "@/components/Content/subDomainUrlContent.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+import contactContent from "@/app/Data/content";
+import SubdomainContent from "@/app/Data/FinalContent";
 
+const ContactInfo: any = contactContent.contactContent;
+const data1: any = SubdomainContent.subdomainData;
 const Page = () => {
   const data: any = data1;
   return (

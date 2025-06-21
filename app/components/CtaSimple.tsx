@@ -1,7 +1,9 @@
 import React from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
 
 const CtaSimple = () => {
   return (

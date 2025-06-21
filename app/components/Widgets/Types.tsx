@@ -1,9 +1,11 @@
 import Image from "next/image";
 import React from "react";
-import data1 from "@/components/Content/typesPage.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Link from "next/link";
 import { MdDoubleArrow } from "react-icons/md";
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const data1: any = contactContent.typesJsonContent;
 
 const Types = ({value}:{value?:any}) => {
   // console.log(value)

@@ -2,13 +2,13 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BiMailSend, BiSolidPhone, BiSolidTime } from "react-icons/bi";
 import { FaPhoneVolume } from "react-icons/fa6";
-import contentData from "@/components/Content/contact.json";
-import ContactInfo from '@/components/Content/ContactInfo.json';
 import Banner from "../Home/Banner";
 
+import contactContent from "@/app/Data/content";
 
+const ContactInfo: any = contactContent.contactContent;
+const contentData: any = contactContent.contactPageContent;
 
 const Page = () => {
 

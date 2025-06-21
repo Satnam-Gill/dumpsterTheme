@@ -6,10 +6,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import home from "@/components/Content/home.json";
-import { headers } from "next/headers";
-import content from "@/components/Content/subDomainUrlContent.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+import contactContent from "@/app/Data/content";
+import SubdomainContent from "@/app/Data/FinalContent";
+
+const ContactInfo: any = contactContent.contactContent;
+const home: any = contactContent.homePageContent;
+const content: any = SubdomainContent.subdomainData;
 
 const Faq = ({ value = "" }) => {
   const data = home?.faq

@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Link from "next/link";
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
 
 const AreaWeServe = ({ slugs }: any) => {
   const [showAll, setShowAll] = useState(false);

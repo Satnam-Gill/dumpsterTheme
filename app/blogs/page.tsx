@@ -1,10 +1,13 @@
 import Image from "next/image";
 import React from "react";
-import blogData from "@/components/Content/blogs.json";
 import BlogPosts from "../components/Widgets/BlogPosts";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Navbar from "../components/Navbar";
-import blogsMetas from "@/components/Content/location.json"
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const blogData: any = contactContent.blogContent.posts;
+const blogsMetas: any = contactContent.locationPageContent;
 
 export async function generateMetadata() {
   const meta = JSON.parse(

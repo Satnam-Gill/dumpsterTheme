@@ -1,9 +1,12 @@
 import React from "react";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import { GrUserWorker } from "react-icons/gr";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { GiReceiveMoney } from "react-icons/gi";
-import home from "@/components/Content/home.json";
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const home: any = contactContent.homePageContent;
 
 const Affordable = () => {
   const content = home?.affordableWidget;
@@ -23,7 +26,7 @@ const Affordable = () => {
           </a>
         </div>
         <div className="mt-8 flex flex-col justify-center gap-6 lg:flex-row">
-          {content.cards.map((card, index) => (
+          {content.cards.map((card:any, index:number) => (
             <div
               key={index}
               className={`flex w-full max-w-sm flex-col items-center rounded-lg ${

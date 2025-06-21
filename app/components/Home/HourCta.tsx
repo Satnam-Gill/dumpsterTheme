@@ -1,9 +1,10 @@
 import React from "react";
 import { FaPhoneSquareAlt } from "react-icons/fa";
-import ContactInfo from "@/components/Content/ContactInfo.json";
-import home from "@/components/Content/home.json";
 
+import contactContent from "@/app/Data/content";
 
+const ContactInfo: any = contactContent.contactContent;
+const home: any = contactContent.homePageContent;
 const HourCta = () => {
   const data = home?.hourCtaWidget;
   return (
