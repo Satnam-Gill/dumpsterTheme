@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RiMapPin2Fill } from "react-icons/ri";
-import content from "@/components/Content/servicePage.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import { headers } from "next/headers";
-import SubDomainData from "@/components/Content/subDomainUrlContent.json";
+import subdomainContent from "@/app/Data/FinalContent";
+import contactContent from "@/app/Data/content";
+
+const SubDomainData: any = subdomainContent.subdomainData;
+const ContactInfo: any = contactContent.contactContent;
+const content: any = contactContent.servicePageContent;
+
+
 const Footer = () => {
   const headersList = headers();
 const subdomain = headersList.get("x-subdomain") as string | null;
@@ -60,7 +65,7 @@ const address = subdomainData && "address" in subdomainData ? (subdomainData as 
               </div>
               <div className="mt-6 flex  flex-col gap-2  text-center">
                 {data.lists.map(
-                  (list) =>
+                  (list:any) =>
                     list.title && (
                       <Link href={`/services/${list.slug}`} key={list.title}>
                         <p className="">
