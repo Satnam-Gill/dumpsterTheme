@@ -23,8 +23,8 @@ const {
   location = undefined,
   zipCode = undefined,
   bannerImage = undefined,
-  logoImage = undefined,
-  favicon = undefined,
+  logoImage = "",
+  favicon = "",
   googleAnalytics = undefined,
 } = (contactDataJson as any) || {};
 

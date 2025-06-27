@@ -32,69 +32,73 @@ const SubTypePage = ({ params }: any) => {
   );
 
   return (
-    <div className="">
+    <div className="min-h-screen bg-gray-50">
+      {/* Banner Section */}
       <Banner
         h1={serviceData.title}
         header=""
         p1={serviceData.shortDescription}
       />
-      <div className="max-w-8xl mx-auto px-4 py-12">
-        <div className="mb-16 grid grid-cols-1 items-center gap-8 rounded-xl bg-white p-8  md:grid-cols-2">
+      <div className="container mx-auto max-w-[1400px] px-4 py-12">
+        {/* Hero Section */}
+        <div className="mb-16 grid grid-cols-1 items-center gap-10 rounded-2xl bg-white p-10 md:grid-cols-2 ">
           <div>
-            <h2 className="mb-4 text-2xl font-bold text-main">
+            <h2 className="mb-4 text-3xl font-extrabold leading-tight text-main">
               {serviceData.h2}
             </h2>
             <div
-              className="text-lg "
+              className="text-lg leading-relaxed text-gray-700"
               dangerouslySetInnerHTML={{ __html: serviceData.p2 }}
             />
           </div>
           <div className="flex justify-center">
             <Image
-              src={serviceData.imageUrl}
-              className="h-64 w-full rounded-lg object-contain "
+              src={serviceData.h2Image}
+              className="h-72 w-full rounded-xl border  border-gray-100 object-cover"
               alt={serviceData.title.split("/").pop()?.split(".")[0] || "image"}
               width={400}
-              height={256}
+              height={288}
             />
           </div>
         </div>
-        {/* overviewsection */}
-        <div className="max-w-9xl mx-auto mb-16 grid grid-cols-1 items-center gap-8  p-8  md:grid-cols-2">
-          <div className="">
+        {/* Overview Section */}
+        <div className="mb-16 grid grid-cols-1 items-center gap-10 md:grid-cols-2">
+          <div className="flex justify-center">
             <Image
-              src={
-                "https://ik.imagekit.io/serviceproviders/lconDumpster.png?updatedAt=1749276857985"
-              }
-              className="h-64 w-full  object-cover "
+              src={serviceData.overViewImage}
+              className="h-72 w-full rounded-xl border  border-gray-100 object-cover"
               alt={serviceData.title.split("/").pop()?.split(".")[0] || "image"}
               width={400}
-              height={256}
+              height={288}
             />
           </div>
-          <div className="rounded-xl bg-white p-8 shadow-lg">
+          <div className="rounded-2xl border border-gray-100 bg-white p-10 shadow-xl">
             <h2 className="mb-4 text-2xl font-bold text-main">
               {serviceData?.overViewHeading}
             </h2>
             <div
-              className=""
+              className="text-gray-700"
               dangerouslySetInnerHTML={{ __html: serviceData?.overViewContent }}
             />
           </div>
         </div>
-        {/* selection */}
-        <div className="max-w-9xl mx-auto mb-16 grid grid-cols-1 items-center gap-8 rounded-xl bg-white p-8 shadow-lg md:grid-cols-2">
-          <div className="flex flex-col items-center justify-center rounded-xl bg-main p-8 text-white shadow-lg">
+        {/* Selection Section */}
+        <div className="mb-16 grid grid-cols-1 gap-10 md:grid-cols-2">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-main/20 bg-main p-10 text-white shadow-xl">
             <h2 className="mb-2 text-2xl font-bold">
               {serviceData.leftSection.title}
             </h2>
-            <div className="mb-2">{serviceData.leftSection.description}</div>
+            <div className="mb-2 text-lg opacity-90">
+              {serviceData.leftSection.description}
+            </div>
           </div>
-          <div className="flex flex-col justify-center rounded-xl bg-white p-8 ">
+          <div className="flex flex-col justify-center rounded-2xl border border-gray-100 bg-white p-10 shadow-xl">
             <h2 className="mb-2 text-2xl font-bold text-main">
               {serviceData.rightSection.title}
             </h2>
-            <div className="mb-2">{serviceData.rightSection.description}</div>
+            <div className="mb-2 text-lg text-gray-700">
+              {serviceData.rightSection.description}
+            </div>
             {/* <Link
               href="#"
               className="font-semibold text-green-700 hover:underline"
@@ -104,13 +108,13 @@ const SubTypePage = ({ params }: any) => {
           </div>
         </div>
         {/* Compare Section */}
-        <section className="bg-gray-50 px-4 py-12 md:py-16">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="mb-12 text-center text-2xl font-bold ">
+        <section className=" mb-16 px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="mb-12 text-center text-2xl font-bold text-main">
               {serviceData?.comapreHeading}
             </h2>
             <div className="grid gap-8 md:grid-cols-2">
-              <div className="rounded-2xl border border-green-200 bg-white p-6 shadow-lg md:p-8">
+              <div className="rounded-2xl border border-green-200 bg-green-50 p-8  transition hover:shadow-lg">
                 <h3 className="mb-4 text-2xl font-semibold text-green-700">
                   {serviceData.allowedHeading}
                 </h3>
@@ -121,13 +125,14 @@ const SubTypePage = ({ params }: any) => {
                       className="flex items-start gap-4"
                     >
                       <CheckCircle className="mt-1 h-6 w-6 text-green-600" />
-                      <p className="text-base leading-relaxed ">{item}</p>
+                      <p className="text-base leading-relaxed text-gray-700">
+                        {item}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
-
-              <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-lg md:p-8">
+              <div className="rounded-2xl border border-red-200 bg-red-50 p-8  transition hover:shadow-lg">
                 <h3 className="mb-4 text-2xl font-semibold text-red-700">
                   {serviceData.prohibitedHeading}
                 </h3>
@@ -139,7 +144,9 @@ const SubTypePage = ({ params }: any) => {
                         className="flex items-start gap-4"
                       >
                         <XCircle className="mt-1 h-6 w-6 text-red-600" />
-                        <p className="text-base leading-relaxed ">{item}</p>
+                        <p className="text-base leading-relaxed text-gray-700">
+                          {item}
+                        </p>
                       </div>
                     ),
                   )}
@@ -149,44 +156,49 @@ const SubTypePage = ({ params }: any) => {
           </div>
         </section>
         {/* Ideal Section */}
-        <div className="mx-auto max-w-6xl rounded-3xl p-10">
-          <h2 className="mb-10 text-center text-2xl font-bold  md:text-3xl">
+        <div className="mx-auto mb-16 max-w-7xl rounded-3xl bg-white p-10">
+          <h2 className="mb-10 text-center text-2xl font-bold text-main md:text-3xl">
             {serviceData.idealHeading}
           </h2>
           <div className="flex flex-wrap justify-center gap-6">
             {serviceData.idealProjects.map((text: any, index: number) => (
               <div
                 key={index}
-                className="w-full rounded-xl border border-blue-100 bg-main p-6 text-center text-base font-medium text-white  shadow-sm transition-shadow duration-300 hover:shadow-md sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]"
+                className="w-full rounded-xl border border-blue-100 bg-main p-6 text-center text-base font-medium text-white shadow-sm transition-shadow duration-300 hover:shadow-lg sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)]"
               >
                 {text}
               </div>
             ))}
           </div>
         </div>
-        <CtaSimple />
+        {/* CTA Section */}
+        <div className="mb-16">
+          <CtaSimple />
+        </div>
         {/* Process Section */}
-        <ProcessWidget />
-        {/* Types */}
-        <div className="max-w-9xl mx-auto mb-5 mt-16 bg-white p-8">
-          <h2 className="mb-4 text-center text-2xl font-bold text-main">
+        <div className="mb-16">
+          <ProcessWidget />
+        </div>
+        {/* Types Section */}
+        <div className="rounded-2xl border border-gray-100 bg-white p-10 shadow-xl">
+          <h2 className="mb-8 text-center text-2xl font-bold text-main">
             {serviceData.tyesHeading}
           </h2>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-6">
             {Servicedata.lists
               .filter((Item: any) => Item.slug !== params.types)
               .map((type: any, idx: number) => (
                 <Link
                   href={`/types/${type.slug}`}
                   key={idx}
-                  className="flex w-48 flex-col items-center rounded-lg bg-gray-100 p-4"
+                  className="group flex w-48 flex-col items-center rounded-lg border  border-gray-200 bg-gray-100 p-6 transition hover:bg-main hover:text-white hover:shadow-lg"
                 >
                   <Image
-                    src="https://ik.imagekit.io/serviceproviders/lconDumpster.png?updatedAt=1749276857985"
+                    src={serviceData.idealImage}
                     width={56}
                     height={56}
                     alt={type.title}
-                    className="mb-2 w-16"
+                    className="mb-2 w-16 rounded-full   object-cover "
                   />
                   <span className="text-center font-bold ">{type.title}</span>
                 </Link>
