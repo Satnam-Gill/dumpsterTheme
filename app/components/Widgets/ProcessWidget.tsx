@@ -1,5 +1,7 @@
 import React from "react";
-import home from "@/components/Content/home.json";
+import contactContent from "@/app/Data/content";
+
+const home: any = contactContent.homePageContent;
 
 const ProcessWidget = () => {
   const content = home?.processWidget;
@@ -18,7 +20,7 @@ const ProcessWidget = () => {
         <div className="absolute left-1/2 top-0 z-0 hidden h-full w-1 -translate-x-1/2 bg-gray-300 md:block" />
 
         <div className="space-y-16">
-          {content.steps.map((step, index) => {
+          {content.steps.map((step:any, index:number) => {
             const isLeft = index % 2 === 0;
             return (
               <div

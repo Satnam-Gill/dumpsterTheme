@@ -2,18 +2,22 @@ import Image from "next/image";
 import Banner from "./Banner";
 import WhyChoose from "./WhyChoose";
 import HourCta from "./HourCta";
-import homeData from "@/components/Content/home.json";
 import Faq from "./Faq";
 import Service from "@/app/components/Home/Service";
 import Affordable from "./Affordable";
 import ProcessWidget from "../Widgets/ProcessWidget";
 import AreaWeServe from "../Widgets/AreaWeServe";
-import content from "@/components/Content/subDomainUrlContent.json";
 import ReviewWidget from "../Widgets/ReviewWidget";
 import Navbar from "../Navbar";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Link from "next/link";
 import Types from "../Widgets/Types";
+
+import contactContent from "@/app/Data/content";
+import SubdomainContent from "@/app/Data/FinalContent";
+
+const ContactInfo: any = contactContent.contactContent;
+const homeData: any = contactContent.homePageContent;
+const content: any = SubdomainContent.subdomainData;
 
 const Hero = () => {
   const cityData: any = content;
@@ -63,7 +67,7 @@ const Hero = () => {
           {/* Section 1 */}
           {/* TYPES */}
           <Service />
-          <Types/>
+          <Types />
           {/* TYPES*/}
           <Affordable />
           {/* Section 4 */}

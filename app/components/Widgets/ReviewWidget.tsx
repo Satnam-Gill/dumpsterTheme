@@ -4,9 +4,15 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
-import home from "@/components/Content/home.json";
-import content from "@/components/Content/subDomainUrlContent.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+
+import contactContent from "@/app/Data/content";
+import subdomainContent from "@/app/Data/FinalContent";
+
+
+const ContactInfo: any = contactContent.contactContent;
+const home: any = contactContent.homePageContent;
+const content: any = subdomainContent.subdomainData;
+
 
 interface Review {
   id: number;

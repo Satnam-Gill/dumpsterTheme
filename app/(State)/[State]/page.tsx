@@ -1,9 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import content from "@/components/Content/subDomainUrlContent.json";
 import Banner from "@/app/components/Home/Banner";
 import Service from "@/app/components/Home/Service";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Faq from "@/app/components/Home/Faq";
 import HourCta from "@/app/components/Home/HourCta";
 import ReviewWidget from "@/app/components/Widgets/ReviewWidget";
@@ -15,6 +13,13 @@ import Link from "next/link";
 import ZipAndNeighAccordian from "@/app/components/Home/ZipAndNeighAccordian";
 import Types from "@/app/components/Widgets/Types";
 // import Service from "@/app/Components/Service";
+
+
+import contactContent from "@/app/Data/content";
+import subdomainContent from "@/app/Data/FinalContent";
+
+const ContactInfo: any = contactContent.contactContent;
+const content: any = subdomainContent.subdomainData;
 
 interface SubdomainPageProps {
   params: { State: string };
@@ -85,20 +90,6 @@ export function generateMetadata({ params }: SubdomainPageProps) {
       canonical: `https://${State}.${ContactInfo.host}`,
     },
   };
-}
-interface CityData {
-  slug: string;
-  bannerText: string;
-  hone: string;
-  pone: string;
-  htwo: string;
-  ptwo: string;
-  hthree: string;
-  pthree: string;
-  hfour: string;
-  pfour: string;
-  history: string[];
-  topSight: { name: string; image: string; description: string }[];
 }
 export default function SubdomainPage({ params }: SubdomainPageProps) {
   // console.log(params)

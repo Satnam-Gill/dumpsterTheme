@@ -1,15 +1,19 @@
 import Banner from "@/app/components/Home/Banner";
 import React from "react";
-import contentData from "@/components/Content/ourBrand.json";
 import { Metadata } from "next";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Image from "next/image";
 import Link from "next/link";
 import NavbarState from "@/app/components/State/NavbarState";
 
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const contentData: any = contactContent.brandsContent;
+
+
 export const metadata: Metadata = {
   title: {
-    absolute: contentData.metaTitle,
+    absolute: contentData?.metaTitle,
   },
   description: contentData.metaDescription
     ?.split("[location]")
@@ -64,7 +68,7 @@ const page = () => {
       {/* Content 1 */}
       {contentData.brandslist && (
         <div className=" flex  flex-col justify-center bg-slate-50 py-10">
-          {contentData.brandslist.map((i, index) => (
+          {contentData.brandslist.map((i:any, index:number) => (
             <div
               key={index}
               className="mx-auto grid max-w-6xl items-center justify-center gap-4 border-b border-black p-4 md:py-10"

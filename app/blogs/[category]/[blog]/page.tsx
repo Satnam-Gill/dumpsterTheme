@@ -1,16 +1,20 @@
 import React from "react";
-import BlogJson from "@/components/Content/blogs.json";
 import Image from "next/image";
 import DateComponent from "@/app/components/Widgets/DateComponent";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Link from "next/link";
 import Navbar from "@/app/components/Navbar";
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const BlogJson: any = contactContent.blogContent.posts;
+
 export function generateMetadata({
   params,
 }: {
   params: { blog: string; category: string };
 }) {
-  const blogFilteredData = BlogJson.filter((blog) => blog.slug === params.blog);
+  const blogFilteredData = BlogJson.filter((blog:any) => blog.slug === params.blog);
   return {
     title: blogFilteredData[0]?.metaTitle,
     description: blogFilteredData[0]?.metaDescription,
@@ -21,7 +25,7 @@ export function generateMetadata({
 }
 
 const page = ({ params }: { params: { blog: string } }) => {
-  const blogFilteredData = BlogJson.filter((blog) => blog.slug === params.blog);
+  const blogFilteredData = BlogJson.filter((blog:any) => blog.slug === params.blog);
   return (
     <div className="">
       <Navbar />

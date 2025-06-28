@@ -1,11 +1,14 @@
 import Image from "next/image";
 import React from "react";
-import content1 from "@/components/Content/servicePage.json";
-import content from "@/components/Content/subDomainUrlContent.json";
 import { MdDoubleArrow } from "react-icons/md";
 import Link from "next/link";
-import { Contact } from "lucide-react";
-import  ContactInfo  from "@/components/Content/ContactInfo.json";
+import contactContent from "@/app/Data/content";
+import subdomainContent from "@/app/Data/FinalContent";
+
+const ContactInfo: any = contactContent.contactContent;
+const content1: any = contactContent.servicePageContent;
+const content: any = subdomainContent.subdomainData;
+
 interface ServiceItem {
   imageUrl: string;
   slug: string;

@@ -16,11 +16,13 @@
                         "description": "<ul>     <li>         <p><strong>Capacity</strong>: 10 cubic yards</p>     </li>     <li>         <p><strong>Benefits</strong>:</p>         <ul class='list-disc pl-4'>             <li>                 <p>Easy to place in tight spaces</p>             </li>             <li>                 <p>Ideal for small home cleanouts, yard waste, and light demolition</p>             </li>  <li>                 <p>Cost-effective for small projects</p>             </li>       </ul>     </li> </ul>",
                         "h2": " What Is a 10-Yard Dumpster in [location]",
                         "p2": "Planning an event or managing a construction site? Our standard portable toilet rental in [location] provides a cost-effective solution for your sanitation needs. We offer clean, well-maintained units delivered promptly to your location. Whether it's a small gathering or a large construction project, we ensure your guests and workers have access to necessary facilities. Call Us today to secure your rental today!",
+                        "h2Image": "https://ik.imagekit.io/serviceproviders/vrdumpsters.com/two-blue-overfilled-waste-bins.jpeg?updatedAt=1744368332299",
                         "tyesHeading": "When Do You Need a Standard Portable Toilet in [location]?",
                         "slug": "10-yard-dumpster",
                         "imageUrl": "https://ik.imagekit.io/serviceproviders/vrdumpsters.com/10-Yard-Roll-Off-Dumpster.png?updatedAt=1744367656728",
                         "overViewHeading": " Overview Of 10 Yard Dumpster",
                         "overViewContent": "<ul><li><p><strong>Not Accepted</strong>:</p><ul class='list-disc pl-4'><li><p>Heavy materials</p></li><li><p>Construction and demolition debris</p></li><li><p>Contact us with questions or unusual roofing debris.</p></li></ul></li></ul><div class='mb-2 font-semibold'>What's Included:</div><ul class='list-disc pl-4 mb-4'><li><p>Delivery and pickup</p></li><li><p>Convenient scheduling and account management</p></li></ul><div class='mb-2 font-semibold'>Container Dimensions:</div><div class='mb-2'>12' L x 8' W x 3.5' H</div><div class='text-sm text-gray-500'>Holds: 4 Truckloads</div>",
+                        "overViewImage":"https://ik.imagekit.io/serviceproviders/vrdumpsters.com/two-blue-overfilled-waste-bins.jpeg?updatedAt=1744368332299",
                         "leftSection": {
                               "title": "20 YARD DUMPSTERS",
                               "description": "Larger jobs: basement, attic, garage clean-outs, landscaping, bathroom remodels"
@@ -46,6 +48,7 @@
                               "Heavy concrete loads (unless pre-approved)"
                         ],
                         "idealHeading": " Ideal Projects for a 10-Yard Dumpster:",
+                        "idealImage":"https://ik.imagekit.io/serviceproviders/lconDumpster.png?updatedAt=1749276857985",
                         "idealProjects": [
                               "Small home renovation projects",
                               "Garage or attic cleanouts",

@@ -1,12 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import DateComponent from "@/app/components/Widgets/DateComponent";
-import blogData from "@/components/Content/blogs.json";
 import Link from "next/link";
-import ContactInfo from "@/components/Content/ContactInfo.json";
-import blogsCategoryMetas from "@/components/Content/blogsCategoryMetas.json";
 import Navbar from "@/app/components/Navbar";
 import Banner from "@/app/components/Home/Banner";
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const blogData: any = contactContent.blogContent.posts;
+const blogsCategoryMetas: any = contactContent.blogCategoryMetaMap;
 
 interface blogsCategoryType {
   [key: string]: {
@@ -61,7 +64,7 @@ const page = ({ params }: { params: { category: string } }) => {
     }
   });
   const FilteredData = blogData.filter(
-    (item) => item.catagory === params.category,
+    (item: any) => item.catagory === params.category,
   );
   const blogsMetas = blogsCategoryMetas as blogsCategoryType;
   const metas = blogsMetas[params.category];
@@ -71,28 +74,11 @@ const page = ({ params }: { params: { category: string } }) => {
       <Navbar />
       <div>
         <Banner
-        h1={FilteredData[0]?.categoryName}
-        image={metas.bannerImage}
-        p1={metas.description}
-      />
-        {/* <div className=" relative  h-[50vh] max-w-[2100px] duration-150 ease-in-out md:mt-0 md:h-[350px] ">
-          <Image
-            className="absolute h-[50vh] w-[100%] object-cover  md:h-[350px] "
-            src={`https://ik.imagekit.io/h7rza8886p/dumpster-recycle-waste-and-garbage-bins.jpg?updatedAt=1749623678772`}
-            alt="Banner_Image"
-            width={900}
-            height={900}
-          />
-          <div className="top-30  relative  flex h-full items-center gap-2 bg-gradient-to-r  from-[#000000f3] to-[#00000050] text-3xl text-white   md:px-12 md:text-[40px] ">
-            <div className=" w-full px-4 pt-4 text-center font-bold leading-[50px] text-white md:mt-14 md:px-0 md:pt-40 lg:ml-0 lg:w-full lg:pt-0">
-              <div className="uppercase">{FilteredData[0]?.categoryName}</div>
-            </div>
-          </div>
-        </div> */}
+          h1={FilteredData[0]?.categoryName}
+          image={metas.bannerImage}
+          p1={metas.description}
+        />
         <div className="my-10 mt-20 px-4 md:px-10">
-          {/* <h2 className="text-center text-3xl font-semibold uppercase text-main ">
-          {FilteredData[0].categoryName}
-        </h2> */}
           <div className="Card my-10 grid gap-16  md:grid-cols-2 lg:grid-cols-3 ">
             {sortedDataBycatagory[params.category]
               .reverse()
@@ -163,7 +149,9 @@ const page = ({ params }: { params: { category: string } }) => {
 export default page;
 
 export function generateStaticParams() {
-  const subDomain = Array.from(new Set(blogData.map((item) => item.catagory)));
+  const subDomain = Array.from(
+    new Set(blogData.map((item: any) => item.catagory)),
+  );
   // const subDomain = Object.keys(cityData);
   return subDomain.map((locations: any) => ({
     category: locations.toString(),

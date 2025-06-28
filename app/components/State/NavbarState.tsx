@@ -5,7 +5,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaPhoneVolume } from "react-icons/fa";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
 
 
 const NavbarState = () => {

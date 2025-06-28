@@ -1,6 +1,8 @@
 import Hero from "./components/Home/Hero";
-import homeData from "@/components/Content/home.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const homeData: any = contactContent.homePageContent;
 
 export async function generateMetadata() {
   return {

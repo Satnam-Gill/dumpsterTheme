@@ -1,11 +1,14 @@
 import Banner from "@/app/components/Home/Banner";
 import React from "react";
 import Service from "@/app/components/Home/Service";
-import contentData from "@/components/Content/typesPage.json";
 import { Metadata } from "next";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import Navbar from "../components/Navbar";
 import Types from "../components/Widgets/Types";
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const contentData: any = contactContent.typesJsonContent;
 
 export const metadata: Metadata = {
   title: {

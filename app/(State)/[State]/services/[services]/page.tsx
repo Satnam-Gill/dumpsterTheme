@@ -1,19 +1,21 @@
 import Banner from "@/app/components/Home/Banner";
 import React from "react";
-import data from "@/components/Content/servicePage.json";
 import Image from "next/image";
 import Service from "@/app/components/Home/Service";
 import { headers } from "next/headers";
-import content from "@/components/Content/subDomainUrlContent.json";
-import ContactInfo from "@/components/Content/ContactInfo.json";
 import CtaSimple from "@/app/components/CtaSimple";
 import NavbarState from "@/app/components/State/NavbarState";
 
-const Servicedata = data?.serviceData;
+import contactContent from "@/app/Data/content";
+import subdomainContent from "@/app/Data/FinalContent";
 
+const ContactInfo: any = contactContent.contactContent;
+const data: any = contactContent.servicePageContent;
+const content: any = subdomainContent.subdomainData;
+const Servicedata = data?.serviceData;
 export function generateMetadata({ params }: { params: { services: string } }) {
   const serviceData: any = Servicedata.lists.find(
-    (service) => service.slug === params.services,
+    (service:any) => service.slug === params.services,
   );
   const headersList = headers();
   const subdomain = headersList.get("x-subdomain");
@@ -32,7 +34,7 @@ export function generateMetadata({ params }: { params: { services: string } }) {
 
 const page = ({ params }: { params: { services: string } }) => {
   const serviceData: any = Servicedata.lists.find(
-    (service) => service.slug === params.services,
+    (service:any) => service.slug === params.services,
   );
   const headersList = headers();
   const subdomain = headersList.get("x-subdomain");

@@ -1,10 +1,13 @@
 import React from "react";
 import FullPage from "@/app/components/location/FullPage";
-import contentData from "@/components/Content/location.json";
 import Banner from "@/app/components/Home/Banner";
 import { Metadata } from "next";
 import Navbar from "../components/Navbar";
-import ContactInfo from "@/components/Content/ContactInfo.json";
+
+import contactContent from "@/app/Data/content";
+
+const ContactInfo: any = contactContent.contactContent;
+const contentData: any = contactContent.locationPageContent;
 
 export const metadata: Metadata = {
   title: {
