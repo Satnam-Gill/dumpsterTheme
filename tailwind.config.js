@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const ContactInfo = require("./components/Content/ContactInfo.json");
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -18,8 +20,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        'minor': '#fed700',
-        'main': '#283143',
+        minor: ContactInfo.minor || '#fed700',
+        main: ContactInfo.main || '#fed700',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

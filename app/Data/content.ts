@@ -26,6 +26,8 @@ const {
   logoImage = "",
   favicon = "",
   googleAnalytics = undefined,
+  minor = "#fed700",
+  main = "#283143",
 } = (contactDataJson as any) || {};
 
 const contactContent: any = {
@@ -43,6 +45,8 @@ const contactContent: any = {
   logoImage,
   favicon,
   googleAnalytics,
+  minor,
+  main
 };
 
 //About Content
