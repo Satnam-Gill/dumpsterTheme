@@ -1,13 +1,14 @@
 import Image from "next/image";
 import React from "react";
 import BlogPosts from "../components/Widgets/BlogPosts";
+import ContactInfo from "@/components/Content/ContactInfo.json";
 import Navbar from "../components/Navbar";
-
+import { headers } from "next/headers";
 import contactContent from "@/app/Data/content";
-
-const ContactInfo: any = contactContent.contactContent;
-const blogData: any = contactContent.blogContent.posts;
 const blogsMetas: any = contactContent.locationPageContent;
+// Force the page to be dynamic
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata() {
   const meta = JSON.parse(
@@ -19,18 +20,15 @@ export async function generateMetadata() {
   );
   return {
     title: meta.metaTitle,
-    description:
-      meta.metaDescription,
+    description: meta.metaDescription,
     alternates: {
       canonical: `${ContactInfo.baseUrl}blogs`,
     },
   };
 }
 
-export const revalidate = 60;
-
 // Function to group and sort data by location
-function groupAndSortBycatagory(data: any) {
+function groupAndSortBycatagory(data: any[]) {
   const groupedData = data.reduce((acc: any, item: any) => {
     const catagory = item.catagory;
     if (!acc[catagory]) {
@@ -47,21 +45,72 @@ function groupAndSortBycatagory(data: any) {
 
   return sortedOutput;
 }
+
+async function getBlogData() {
+  const headersList = headers();
+  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+  const host = headersList.get("host") || "localhost:3000";
+
+  const res = await fetch(`${protocol}://${host}/api/blogs`, {
+    cache: "no-store",
+  });
+
+  return res.json();
+}
+
 const page = async () => {
+  let blogData: any[] = [];
+  let notFound = false;
+  let currentDate = "";
+
+  try {
+    const data = await getBlogData();
+
+    if (!data || !data.blogs) {
+      notFound = true;
+      currentDate = data?.currentDate;
+    } else {
+      blogData = data.blogs;
+      currentDate = data.currentDate;
+      if (!blogData.length) {
+        notFound = true;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    notFound = true;
+  }
+
+  if (notFound || blogData.length === 0) {
+    return (
+      <div className="">
+        <Navbar />
+        <div className="mx-auto max-w-[1905px] p-8 text-center text-lg">
+          <p>No blogs are currently published.</p>
+          <p className="mt-2 text-sm text-gray-600">
+            Check back later for new content!
+          </p>
+          {currentDate && (
+            <p className="mt-1 text-xs text-gray-500">
+              Current date: {currentDate}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const sortedDataBycatagory = groupAndSortBycatagory(blogData);
   const catagorys = Object.keys(sortedDataBycatagory);
+
   return (
     <div className="">
       <Navbar />
-    
-    <div className="overflow-hidden ">
-      <div className="relative -mt-14 duration-150 ease-in-out md:mt-0"></div>
-      <div className="mx-auto max-w-[1905px]">
-        {/* <Navbar /> */}
-        {/* Content */}
-        <BlogPosts postData={blogData} catagorys={catagorys} />
+      <div className="overflow-hidden">
+        <div className="mx-auto max-w-[1905px]">
+          <BlogPosts postData={blogData} catagorys={catagorys} />
+        </div>
       </div>
-    </div>
     </div>
   );
 };
