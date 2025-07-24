@@ -11,7 +11,10 @@ const ContactInfo: any = contactContent.contactContent;
 const aboutContent: any = contactContent.aboutContent;
 export const metadata: Metadata = {
   title: {
-    absolute: aboutContent.metaTitle,
+    absolute: aboutContent.metaTitle?.split("[location]")
+    .join(ContactInfo.location)
+    ?.split("[phone]")
+    .join(ContactInfo.No),
   },
   description: aboutContent.metaDescription
     ?.split("[location]")
