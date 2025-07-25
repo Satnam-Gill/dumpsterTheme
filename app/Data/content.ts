@@ -110,7 +110,7 @@ const contactPageContent: any = {
   bannerImage: contactPageBannerImage,
   h1Banner: contactPageH1Banner,
   p1Banner: contactPageP1Banner,
-  h2:contacth2Image,
+  h2,
   h2Image,
   p2:contactp2,
   h3,
