@@ -6,7 +6,6 @@ const WhyChoose = ({data}:any) => {
   return (
     <div className="mt-20 ">
     <h2 className="text-center text-3xl font-extrabold">
-      Why Choose{" "}
       <span className="text-main">{data.title}</span>
     </h2>
     {/* -----------------------------------------card Start------------------------ */}

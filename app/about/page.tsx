@@ -8,13 +8,14 @@ import Navbar from "../components/Navbar";
 import contactContent from "@/app/Data/content";
 
 const ContactInfo: any = contactContent.contactContent;
-const aboutContent: any = contactContent.aboutContent;
+const aboutContent: any = contactContent.aboutContent
 export const metadata: Metadata = {
   title: {
-    absolute: aboutContent.metaTitle?.split("[location]")
-    .join(ContactInfo.location)
-    ?.split("[phone]")
-    .join(ContactInfo.No),
+    absolute: aboutContent.metaTitle
+      ?.split("[location]")
+      .join(ContactInfo.location)
+      ?.split("[phone]")
+      .join(ContactInfo.No),
   },
   description: aboutContent.metaDescription
     ?.split("[location]")
@@ -35,10 +36,7 @@ const page = () => {
             {/* poster */}
             <Banner
               h1={aboutContent.h1Banner
-                ?.split("[location]")
-                .join(ContactInfo.location)
-                ?.split("[phone]")
-                .join(ContactInfo.No)}
+                }
               image={aboutContent.bannerImage}
               header={aboutContent.bannerQuote}
               p1={aboutContent.metaDescription

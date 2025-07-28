@@ -4,51 +4,51 @@ import React, { useLayoutEffect } from "react";
 import DateComponent from "@/app/components/Widgets/DateComponent";
 import Link from "next/link";
 
-function groupAndSortBycatagory(data: any) {
+function groupAndSortBycategory(data: any) {
   const groupedData = data.reduce((acc: any, item: any) => {
-    const catagory = item.catagory;
-    if (!acc[catagory]) {
-      acc[catagory] = [];
+    const category = item.category;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[catagory].push(item);
+    acc[category].push(item);
     return acc;
   }, {});
 
-  const sortedcatagorys = Object.keys(groupedData).sort();
+  const sortedcategorys = Object.keys(groupedData).sort();
 
-  const sortedOutput = sortedcatagorys.reduce((acc: any, catagory) => {
-    acc[catagory] = groupedData[catagory];
+  const sortedOutput = sortedcategorys.reduce((acc: any, category) => {
+    acc[category] = groupedData[category];
     return acc;
   }, {});
 
   return sortedOutput;
 }
 
-const BlogPosts = ({ postData, catagorys }: any) => {
+const BlogPosts = ({ postData, categorys }: any) => {
 
-  const sortedDataBycatagory = groupAndSortBycatagory(postData);
+  const sortedDataBycategory = groupAndSortBycategory(postData);
   const reversedData = postData[postData.length - 1];
-  // if (sortedDataBycatagory.roofing) {
-  //   sortedDataBycatagory.roofing = [...sortedDataBycatagory.roofing, ...PushedData];
+  // if (sortedDataBycategory.roofing) {
+  //   sortedDataBycategory.roofing = [...sortedDataBycategory.roofing, ...PushedData];
   // } else {
-  //   sortedDataBycatagory.roofing = PushedData;
+  //   sortedDataBycategory.roofing = PushedData;
   // }
 
   postData.forEach((blog: any) => {
     // Push to its main category
-    // if (sortedDataBycatagory[blog.catagory]) {
-    //   sortedDataBycatagory[blog.catagory].push(blog);
+    // if (sortedDataBycategory[blog.category]) {
+    //   sortedDataBycategory[blog.category].push(blog);
     // } else {
-    //   sortedDataBycatagory[blog.catagory] = [blog];
+    //   sortedDataBycategory[blog.category] = [blog];
     // }
 
     // Check and push to other categories
     if (blog.otherCategory && Array.isArray(blog.otherCategory)) {
       blog.otherCategory.forEach((otherCat: string) => {
-        if (sortedDataBycatagory[otherCat]) {
-          sortedDataBycatagory[otherCat].push(blog);
+        if (sortedDataBycategory[otherCat]) {
+          sortedDataBycategory[otherCat].push(blog);
         } else {
-          sortedDataBycatagory[otherCat] = [blog];
+          sortedDataBycategory[otherCat] = [blog];
         }
       });
     }
@@ -67,7 +67,7 @@ const BlogPosts = ({ postData, catagorys }: any) => {
       <div className="Latest over  relative md:h-80 overflow-hidden rounded-lg   border-main mx-2 lg:flex lg:border-2">
         <div className=" h-fit  rounded-lg  lg:w-fit xl:w-[130%]">
           <Image
-            src={`${reversedData.postImage.src}`}
+            src={`${reversedData.postImageSrc}`}
             alt={reversedData.h1}
             width={10000}
             height={10000}
@@ -90,7 +90,7 @@ const BlogPosts = ({ postData, catagorys }: any) => {
           </div>
           <div className="flex justify-center lg:justify-start">
           <Link
-                href={`/blogs/${reversedData?.catagory.toLowerCase().split(" ").join("-")}/${reversedData?.slug}`}
+                href={`/blogs/${reversedData?.category.toLowerCase().split(" ").join("-")}/${reversedData?.slug}`}
               >
             <div className="mt-2  w-fit rounded-md bg-main px-4 py-2 text-base font-medium  text-white transition duration-150 ease-in-out hover:bg-minor hover:text-black">
               
@@ -102,14 +102,14 @@ const BlogPosts = ({ postData, catagorys }: any) => {
       </div>
       {/* Latest News */}
       <div className="">
-        {catagorys.map((catagory: any, index: number) => (
+        {categorys.map((category: any, index: number) => (
           <div className="mt-10 px-2" key={index + 1}>
             <div className="flex items-center justify-between text-3xl uppercase ">
-              <Link href={`/blogs/${catagory.toLowerCase().split(" ").join("-")}`} className="hover:text-main ease-linear duration-150 transition-colors">
-              {sortedDataBycatagory[catagory][0]?.categoryName}
+              <Link href={`/blogs/${category.toLowerCase().split(" ").join("-")}`} className="hover:text-main ease-linear duration-150 transition-colors">
+              {sortedDataBycategory[category][0]?.categoryName}
               </Link>
               <Link
-                  href={`/blogs/${catagory.toLowerCase().split(" ").join("-")}`}
+                  href={`/blogs/${category.toLowerCase().split(" ").join("-")}`}
                 >
               <div className=" w-fit rounded-md bg-main px-4 py-2 text-base font-medium  text-white transition duration-150 ease-in-out hover:bg-minor hover:text-black">
                 
@@ -124,7 +124,7 @@ const BlogPosts = ({ postData, catagorys }: any) => {
             <div className="mt-4">
               {/* Cards */}
               <div className="Card my-10 grid gap-16  md:grid-cols-2 lg:grid-cols-3 ">
-                {sortedDataBycatagory[catagory]
+                {sortedDataBycategory[category]
                   .reverse()
                   .slice(0, 3)
                   .map((item: any, index: number) => {
@@ -135,7 +135,7 @@ const BlogPosts = ({ postData, catagorys }: any) => {
                       >
                         <div className="overflow-hidden rounded-lg lg:w-fit">
                           <Image
-                            src={`${item.postImage.src}`}
+                            src={`${item.postImageSrc}`}
                             alt={item.h1}
                             width={10000}
                             height={10000}
@@ -156,13 +156,13 @@ const BlogPosts = ({ postData, catagorys }: any) => {
                           </div>
                           <h2 className="mt-2 w-fit text-center text-xl md:text-left ">
                           <Link
-                          href={`/blogs/${item?.catagory.toLowerCase().split(" ").join("-")}/${item.slug}`}
+                          href={`/blogs/${item?.category.toLowerCase().split(" ").join("-")}/${item.slug}`}
                         >{item.h1.toUpperCase()}</Link>
                           </h2>
                           <div className="mt-4 flex justify-between text-sm">
                           <div className=" font-semibold text-main underline-offset-8 duration-300 ease-in-out  hover:underline hover:underline-offset-2">
                         <Link
-                          href={`/blogs/${item?.catagory.toLowerCase().split(" ").join("-")}/${item.slug}`}
+                          href={`/blogs/${item?.category.toLowerCase().split(" ").join("-")}/${item.slug}`}
                         >
                           Read More
                         </Link>

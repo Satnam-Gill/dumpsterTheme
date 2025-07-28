@@ -31,40 +31,40 @@ export function generateMetadata({ params }: { params: { category: string } }) {
   };
 }
 
-function groupAndSortBycatagory(data: any) {
+function groupAndSortBycategory(data: any) {
   const groupedData = data.reduce((acc: any, item: any) => {
-    const catagory = item.catagory;
-    if (!acc[catagory]) {
-      acc[catagory] = [];
+    const category = item.category;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[catagory].push(item);
+    acc[category].push(item);
     return acc;
   }, {});
 
-  const sortedcatagorys = Object.keys(groupedData).sort();
+  const sortedcategorys = Object.keys(groupedData).sort();
 
-  const sortedOutput = sortedcatagorys.reduce((acc: any, catagory) => {
-    acc[catagory] = groupedData[catagory];
+  const sortedOutput = sortedcategorys.reduce((acc: any, category) => {
+    acc[category] = groupedData[category];
     return acc;
   }, {});
 
   return sortedOutput;
 }
 const page = ({ params }: { params: { category: string } }) => {
-  const sortedDataBycatagory = groupAndSortBycatagory(blogData);
+  const sortedDataBycategory = groupAndSortBycategory(blogData);
   blogData.forEach((blog: any) => {
     if (blog.otherCategory && Array.isArray(blog.otherCategory)) {
       blog.otherCategory.forEach((otherCat: string) => {
-        if (sortedDataBycatagory[otherCat]) {
-          sortedDataBycatagory[otherCat].push(blog);
+        if (sortedDataBycategory[otherCat]) {
+          sortedDataBycategory[otherCat].push(blog);
         } else {
-          sortedDataBycatagory[otherCat] = [blog];
+          sortedDataBycategory[otherCat] = [blog];
         }
       });
     }
   });
   const FilteredData = blogData.filter(
-    (item: any) => item.catagory === params.category,
+    (item: any) => item.category === params.category,
   );
   const blogsMetas = blogsCategoryMetas as blogsCategoryType;
   const metas = blogsMetas[params.category];
@@ -80,9 +80,9 @@ const page = ({ params }: { params: { category: string } }) => {
         />
         <div className="my-10 mt-20 px-4 md:px-10">
           <div className="Card my-10 grid gap-16  md:grid-cols-2 lg:grid-cols-3 ">
-            {sortedDataBycatagory[params.category]
+            {sortedDataBycategory[params.category]
               .reverse()
-              .map((item: any, index: number) => {
+              ?.map((item: any, index: number) => {
                 return (
                   <div
                     className="relative rounded-lg border text-black duration-300 ease-in-out md:w-11/12"
@@ -90,7 +90,7 @@ const page = ({ params }: { params: { category: string } }) => {
                   >
                     <div className="overflow-hidden rounded-lg lg:w-fit">
                       <Image
-                        src={`${item.postImage.src}`}
+                        src={`${item.postImageSrc}`}
                         alt={item.h1}
                         width={10000}
                         height={10000}
@@ -111,7 +111,7 @@ const page = ({ params }: { params: { category: string } }) => {
                       </div>
                       <h2 className="mt-2 w-fit text-center text-xl md:text-left ">
                         <Link
-                          href={`/blogs/${item?.catagory.toLowerCase().split(" ").join("-")}/${item.slug}`}
+                          href={`/blogs/${item?.category.toLowerCase().split(" ").join("-")}/${item.slug}`}
                         >
                           {" "}
                           {item.h1.toUpperCase()}
@@ -120,7 +120,7 @@ const page = ({ params }: { params: { category: string } }) => {
                       <div className="mt-4 flex justify-between text-sm ">
                         <div className="font-semibold text-main underline-offset-8 duration-300 ease-in-out  hover:underline hover:underline-offset-2">
                           <Link
-                            href={`/blogs/${item?.catagory.toLowerCase().split(" ").join("-")}/${item.slug}`}
+                            href={`/blogs/${item?.category.toLowerCase().split(" ").join("-")}/${item.slug}`}
                           >
                             Read More
                           </Link>
@@ -150,7 +150,7 @@ export default page;
 
 export function generateStaticParams() {
   const subDomain = Array.from(
-    new Set(blogData.map((item: any) => item.catagory)),
+    new Set(blogData.map((item: any) => item.category)),
   );
   // const subDomain = Object.keys(cityData);
   return subDomain.map((locations: any) => ({

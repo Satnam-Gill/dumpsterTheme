@@ -10,6 +10,20 @@ const blogsMetas: any = contactContent.locationPageContent;
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+async function getBlogData() {
+  // console.log("getBlogData called");
+  const headersList = headers();
+  const blogProtocol: any = headersList.get("x-forwarded-proto") || "http";
+  const host = headersList.get("host");
+  const baseUrl = `${blogProtocol}://${host}`;
+  // console.log("protocol   ===", blogProtocol);
+  // console.log("host   ===", host);
+  const res = await fetch(`${baseUrl}/api/blogs`, {
+    cache: "no-store",
+  });
+  // console.log("res   ===", res);
+  return res.json();
+}
 export async function generateMetadata() {
   const meta = JSON.parse(
     JSON.stringify(blogsMetas.blogMetas)
@@ -22,50 +36,38 @@ export async function generateMetadata() {
     title: meta.metaTitle,
     description: meta.metaDescription,
     alternates: {
-      canonical: `${ContactInfo.baseUrl}blogs`,
+      canonical: `${ContactInfo.baseUrl}blogs/`,
     },
   };
 }
 
 // Function to group and sort data by location
-function groupAndSortBycatagory(data: any[]) {
+function groupAndSortBycategory(data: any[]) {
   const groupedData = data.reduce((acc: any, item: any) => {
-    const catagory = item.catagory;
-    if (!acc[catagory]) {
-      acc[catagory] = [];
+    const category = item.category;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[catagory].push(item);
+    acc[category].push(item);
     return acc;
   }, {});
-  const sortedcatagorys = Object.keys(groupedData).sort();
-  const sortedOutput = sortedcatagorys.reduce((acc: any, catagory) => {
-    acc[catagory] = groupedData[catagory];
+  const sortedcategorys = Object.keys(groupedData).sort();
+  const sortedOutput = sortedcategorys.reduce((acc: any, category) => {
+    acc[category] = groupedData[category];
     return acc;
   }, {});
 
   return sortedOutput;
 }
 
-async function getBlogData() {
-  const headersList = headers();
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const host = headersList.get("host") || "localhost:3000";
 
-  const res = await fetch(`${protocol}://${host}/api/blogs`, {
-    cache: "no-store",
-  });
-
-  return res.json();
-}
 
 const page = async () => {
   let blogData: any[] = [];
   let notFound = false;
   let currentDate = "";
-
   try {
     const data = await getBlogData();
-
     if (!data || !data.blogs) {
       notFound = true;
       currentDate = data?.currentDate;
@@ -100,15 +102,15 @@ const page = async () => {
     );
   }
 
-  const sortedDataBycatagory = groupAndSortBycatagory(blogData);
-  const catagorys = Object.keys(sortedDataBycatagory);
+  const sortedDataBycategory = groupAndSortBycategory(blogData);
+  const categorys = Object.keys(sortedDataBycategory);
 
   return (
     <div className="">
       <Navbar />
       <div className="overflow-hidden">
         <div className="mx-auto max-w-[1905px]">
-          <BlogPosts postData={blogData} catagorys={catagorys} />
+          <BlogPosts postData={blogData} categorys={categorys} />
         </div>
       </div>
     </div>

@@ -263,11 +263,32 @@ const typesJsonContent: any = {
 };
 
 
+// Utility function to replace placeholders in strings
+function replacePlaceholders(obj: any, ContactInfo: any): any {
+  if (typeof obj === "string") {
+    return obj
+      .split("[location]").join(ContactInfo.location)
+      .split("[phone]").join(ContactInfo.No);
+  } else if (Array.isArray(obj)) {
+    return obj.map(item => replacePlaceholders(item, ContactInfo));
+  } else if (obj && typeof obj === "object") {
+    const result: any = {};
+    for (const key in obj) {
+      result[key] = replacePlaceholders(obj[key], ContactInfo);
+    }
+    return result;
+  }
+  return obj;
+}
+
+// Use contactContent as ContactInfo for replacements
+const ContactInfo = contactContent;
+
 const content: {
   aboutContent: any;
   contactContent: any;
   blogContent: any;
-  blogCategoryMetaMap:any;
+  blogCategoryMetaMap: any;
   contactPageContent: any;
   homePageContent: any;
   locationPageContent: any;
@@ -275,16 +296,16 @@ const content: {
   servicePageContent: any;
   typesJsonContent: any;
 } = {
-  aboutContent,
-  contactContent,
-  blogContent,
-  blogCategoryMetaMap,
-  contactPageContent,
-  homePageContent,
-  locationPageContent,
-  brandsContent,
-  servicePageContent,
-  typesJsonContent,
+  aboutContent: replacePlaceholders(aboutContent, ContactInfo),
+  contactContent: replacePlaceholders(contactContent, ContactInfo),
+  blogContent: replacePlaceholders(blogContent, ContactInfo),
+  blogCategoryMetaMap: replacePlaceholders(blogCategoryMetaMap, ContactInfo),
+  contactPageContent: replacePlaceholders(contactPageContent, ContactInfo),
+  homePageContent: replacePlaceholders(homePageContent, ContactInfo),
+  locationPageContent: replacePlaceholders(locationPageContent, ContactInfo),
+  brandsContent: replacePlaceholders(brandsContent, ContactInfo),
+  servicePageContent: replacePlaceholders(servicePageContent, ContactInfo),
+  typesJsonContent: replacePlaceholders(typesJsonContent, ContactInfo),
 };
 
 export default content;
