@@ -13,7 +13,6 @@ export async function GET(request: Request) {
         baseUrl = `${protocol}://${host}`;
       }
     }
-
     if (!baseUrl) {
       baseUrl = process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
@@ -30,19 +29,11 @@ export async function GET(request: Request) {
 
     // Generate XML entries for each blog
     const blogUrls = blogs.map((blog: any) => {
-      const url = `${contactInfo.baseUrl}blogs/${blog.category}/${blog.slug}`;
-      return `
-  <url>
-    <loc>${url}</loc>
-    <lastmod>${blog.publishedAt}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`;
+      const url = `${contactInfo.baseUrl}blogs/${blog.catagory}/${blog.slug}`;
+      return `\n  <url>\n    <loc>${url}</loc>\n    <lastmod>${blog.publishedAt}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`;
     }).join('');
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${blogUrls}
-</urlset>`;
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${blogUrls}\n</urlset>`;
 
     return new NextResponse(xml, {
       headers: {
@@ -50,7 +41,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Sitemap generation error:', error);
     return new NextResponse('Error generating sitemap', { status: 500 });
   }
-}
+} 

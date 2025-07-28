@@ -69,7 +69,7 @@ const address = subdomainData && "address" in subdomainData ? (subdomainData as 
                     list.title && (
                       <Link href={`/services/${list.slug}`} key={list.title}>
                         <p className="">
-                          {list.title?.replace(" in [location]", " ")}
+                           {list.title?.replace(`in ${ContactInfo.location}`, " ")}
                         </p>
                       </Link>
                     ),
