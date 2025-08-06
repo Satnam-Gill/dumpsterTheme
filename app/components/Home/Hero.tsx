@@ -6,7 +6,6 @@ import Faq from "./Faq";
 import Service from "@/app/components/Home/Service";
 import Affordable from "./Affordable";
 import ProcessWidget from "../Widgets/ProcessWidget";
-import AreaWeServe from "../Widgets/AreaWeServe";
 import ReviewWidget from "../Widgets/ReviewWidget";
 import Navbar from "../Navbar";
 import Link from "next/link";
@@ -80,14 +79,14 @@ const Hero = () => {
               <Image
                 height={10000}
                 width={10000}
-                src={`${homeData.h2Image}`}
+                src={`${homeData.h3Image}`}
                 unoptimized={true}
                 className=" h-full w-full rounded-lg object-cover shadow-lg"
                 alt={
-                  homeData.h2Image.split("/").pop()?.split(".")[0] || "image"
+                  homeData.h3Image.split("/").pop()?.split(".")[0] || "image"
                 }
                 title={
-                  homeData.h2Image.split("/").pop()?.split(".")[0] || "image"
+                  homeData.h3Image.split("/").pop()?.split(".")[0] || "image"
                 }
               />
             </div>

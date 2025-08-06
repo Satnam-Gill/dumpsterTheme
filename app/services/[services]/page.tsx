@@ -92,13 +92,7 @@ const page = ({ params }: { params: { services: string } }) => {
               {serviceData.h3.split("[location]").join(locationName)}
             </h2>
             <div
-              className="mt-4 flex flex-wrap justify-center gap-4"
-            // dangerouslySetInnerHTML={{
-            //   __html: serviceData.p3
-            //     .split("[location]")
-            //     .join(locationName),
-            // }}
-            >
+              className="mt-4 flex flex-wrap justify-center gap-4">
               {serviceData.p3.split("|").map((Item: string) => (
                 <p key={Item} className="m-2  rounded-md border  p-4 font-bold">
                   {Item}
@@ -126,7 +120,6 @@ const page = ({ params }: { params: { services: string } }) => {
             </div>
           </div>
         )}
-        {/* <TypeOfDumpster /> */}
       </div>
     </div>
   );
@@ -134,9 +127,3 @@ const page = ({ params }: { params: { services: string } }) => {
 
 export default page;
 
-// export function generateStaticParams() {
-//   const cityData: any = Servicedata.lists;
-//   return cityData.map((locations: any) => ({
-//     services: locations.slug.toString(),
-//   }));
-// }

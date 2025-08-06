@@ -491,14 +491,14 @@ export default function SubdomainPage({ params }: SubdomainPageProps) {
             <div className="mx-10 mt-4 flex h-fit w-auto flex-wrap justify-center gap-4">
               {ContentData?.neighbourhoods?.split("|").map((item: any) => (
                 <div className="" key={item}>
-                  <a
+                  <Link
                     target="_blank"
                     href={`https://www.google.com/maps/search/?api=1&query=${item}, ${ContentData?.slug},`}
                   >
                     <p className="border bg-minor px-2 py-1 text-white duration-100 ease-in-out hover:text-main">
                       {item}
                     </p>
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>

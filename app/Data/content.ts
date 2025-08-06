@@ -111,7 +111,7 @@ const contactPageContent: any = {
   h1Banner: contactPageH1Banner,
   p1Banner: contactPageP1Banner,
   h2,
-  h2Image,
+  h2Image: contacth2Image,
   p2:contactp2,
   h3,
   p3,
