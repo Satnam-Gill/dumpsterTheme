@@ -21,8 +21,31 @@ const content: any = SubdomainContent.subdomainData;
 const Hero = () => {
   const cityData: any = content;
   const slugs: any = Object.keys(cityData).map((key) => cityData[key]);
+   const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: homeData.faq.slice(0, 5).map((faq: any) => ({
+      "@type": "Question",
+      name: faq?.FAQ?.split("[location]").join(
+        ContactInfo.location.split(",")[0].trim(),
+      ),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq?.Answer?.split("[location]").join(
+          ContactInfo.location.split(",")[0].trim(),
+        ),
+      },
+    })),
+  };
+   
   return (
     <div className="">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <Navbar />
       <div className="w-screen overflow-hidden  md:flex md:w-full md:flex-col md:items-center md:justify-center">
         <div className="w-full overflow-hidden text-lg  print:hidden  dark:bg-white dark:text-black">
