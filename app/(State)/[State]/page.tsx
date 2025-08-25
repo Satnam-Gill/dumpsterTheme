@@ -112,10 +112,17 @@ export default function SubdomainPage({ params }: SubdomainPageProps) {
   }
   // nity or db query us particular subdomain read data from database .... neeche theme nu pass hoyega and page render hojaega
   // Render subdomain-specific content
-  const ContentData = cityData[State];
+  const ContentData = JSON.parse(
+    JSON.stringify(cityData[State])
+      .split("[location]")
+      .join(ContactInfo.location)
+      .split("[phone]")
+      .join(ContactInfo.No),
+  );
   const slugs: any = Object.keys(cityData)
     .filter((key) => key !== State)
     .map((key) => cityData[key]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -174,17 +181,18 @@ export default function SubdomainPage({ params }: SubdomainPageProps) {
       },
       {
         "@type": "FAQPage",
-        mainEntity: home.faq.slice(0, 5).map((faq: any) => ({
+        mainEntity: ContentData.faq.map((faq: any) => ({
           "@type": "Question",
-          name: faq?.FAQ?.split("[location]").join(State),
+          name: faq?.ques?.split("[location]").join(State),
           acceptedAnswer: {
             "@type": "Answer",
-            text: faq?.Answer?.split("[location]").join(State),
+            text: faq?.ans?.split("[location]").join(State),
           },
         })),
       },
     ],
   };
+
 
   return (
     <div className="">
@@ -583,7 +591,8 @@ export default function SubdomainPage({ params }: SubdomainPageProps) {
         ) : null}
         {/* Zip */}
         {/* FAQ */}
-        {ContentData?.faq ? <Faq value={State} /> : null}
+        {ContentData?.faq ? <Faq data={ContentData?.faq} value={`${ContentData.name}, ${abbrevations.toUpperCase()}`}/> : null}
+        
         {/* FAQ */}
         {/* CounterCta */}
         {/* CounterCta */}

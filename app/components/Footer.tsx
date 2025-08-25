@@ -19,7 +19,7 @@ const Footer = () => {
   const address =
     subdomainData && "address" in subdomainData
       ? (subdomainData as { address: string }).address
-      : undefined;
+      : ContactInfo.address;
   return (
     <div className=" flex w-full items-center justify-center bg-[#eeecec]">
       <div className=" flex w-full  items-center justify-center overflow-hidden">
@@ -108,11 +108,11 @@ const Footer = () => {
                     </Link>
                   </div>
                 </div>
-                {ContactInfo.address && (
+                {address && (
                   <div className="mt-2 ">
                     <div className="flex gap-4">
                       <RiMapPin2Fill className="text-cream  mt-1 w-8 text-lg" />
-                      <div className="text-start"> {ContactInfo.address}</div>
+                      <div className="text-start"> {address}</div>
                     </div>
                   </div>
                 )}

@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="robots" content = "index"/>
         <link rel="icon" href={ContactInfo.favicon} />
       </head>
       <GoogleAnalytics gaId={ContactInfo.googleAnalytics} />
