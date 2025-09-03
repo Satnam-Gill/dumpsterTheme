@@ -32,13 +32,13 @@ export function generateMetadata({ params }: { params: { services: string } }) {
   return {
     title: {
       absolute: contentData.h1Banner
-        ?.split("[location]")
+        ?.split(ContactInfo.location)
         .join(Data?.name || ContactInfo.location)
         ?.split("[phone]")
         .join(ContactInfo.No),
     },
     description: contentData.metaDescription
-      ?.split("[location]")
+      ?.split(ContactInfo.location)
       .join(Data?.name || ContactInfo.location)
       ?.split("[phone]")
       .join(ContactInfo.No),
@@ -68,18 +68,18 @@ const page = () => {
       <div>
         <Banner
           h1={contentData.h1Banner
-            ?.split("[location]")
+            ?.split(ContactInfo.location)
             .join(Data?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(ContactInfo.No)}
           image={contentData.bannerImage}
           header={contentData.bannerQuote
-            ?.split("[location]")
+            ?.split(ContactInfo.location)
             .join(Data?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(ContactInfo.No)}
           p1={contentData.metaDescription
-            ?.split("[location]")
+            ?.split(ContactInfo.location)
             .join(Data?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(ContactInfo.No)}

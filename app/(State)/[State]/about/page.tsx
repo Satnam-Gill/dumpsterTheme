@@ -33,11 +33,11 @@ export function generateMetadata({ params }: { params: { services: string } }) {
   const Data: any = content[subdomain];
   return {
     title: {
-      absolute: contentData.metaTitle?.split("[location]").join(Data?.name || ContactInfo.location)
+      absolute: contentData.metaTitle?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No),
     },
     description: contentData.metaDescription
-      ?.split("[location]").join(Data?.name || ContactInfo.location)
+      ?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No),
     alternates: {
       canonical: `https://${Data.slug}.${ContactInfo.host}/about/`,
@@ -74,11 +74,11 @@ const Page = async () => {
       <div className="  cursor-default w-screen md:w-full  min-w-[375px] text-lg">
         {/* poster */}
         <Banner
-          h1={contentData.h1Banner?.split("[location]").join(Data?.name || ContactInfo.location)
+          h1={contentData.h1Banner?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
           image={contentData.bannerImage}
           header={contentData.bannerQuote}
-          p1={contentData.metaDescription?.split("[location]").join(Data?.name || ContactInfo.location)
+          p1={contentData.metaDescription?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
         />
         {/* poster */}
@@ -93,7 +93,7 @@ const Page = async () => {
                 Who We Are?<br></br>
               </h2>
               <div className="mt-6 "></div>
-              <div className="  text-justify" dangerouslySetInnerHTML={{ __html: contentData.p2?.split("[location]").join(Data?.name || ContactInfo.location)
+              <div className="  text-justify" dangerouslySetInnerHTML={{ __html: contentData.p2?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No) }}>
               </div>
             </div>
@@ -135,19 +135,19 @@ const Page = async () => {
           <div className="p-4  rounded-lg w-full grid grid-cols-1 md:grid-cols-3 gap-8 ">
             <div className="border-[3px] hover:bg-main  hover:text-white ease-in-out duration-300  rounded-lg border-main ">
               <h2 className="text-2xl font-bold p-2 text-center">{contentData.missionSection[0].title}</h2>
-              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[0].description?.split("[location]").join(Data?.name || ContactInfo.location)
+              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[0].description?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No)}}></div>
             </div>
 
             <div className="border-[3px] bg-main  hover:bg-transparent hover:text-black  text-white ease-in-out duration-300  rounded-lg border-main ">
               <h2 className="text-2xl font-bold p-2 text-center">{contentData.missionSection[1].title}</h2>
-              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[1].description?.split("[location]").join(Data?.name || ContactInfo.location)
+              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[1].description?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No)}}></div>
             </div>
 
             <div className="border-[3px] hover:bg-main hover:text-white ease-in-out duration-300  rounded-lg border-main ">
               <h2 className="text-2xl font-bold p-2 text-center">{contentData.missionSection[2].title}</h2>
-              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[2].description?.split("[location]").join(Data?.name || ContactInfo.location)
+              <div className=" p-4 text-center" dangerouslySetInnerHTML={{ __html: contentData.missionSection[2].description?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No)}}></div>
             </div>
 
@@ -170,7 +170,7 @@ const Page = async () => {
         {/* all */}
         <div className="md:mx-20 mx-4 my-20">
           <div className="text-2xl font-bold "><div className="flex justify-center gap-2 "><FaCrown className={`text-2xl text-main `} />Areas We Serve</div></div>
-          <div className=" mt-2 text-xl text-center" dangerouslySetInnerHTML={{ __html: contentData.areaweserveSection.description?.split("[location]").join(Data?.name || ContactInfo.location)
+          <div className=" mt-2 text-xl text-center" dangerouslySetInnerHTML={{ __html: contentData.areaweserveSection.description?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No) }}> 
             
           </div>

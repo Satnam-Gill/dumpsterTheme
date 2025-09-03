@@ -21,12 +21,12 @@ export function generateMetadata({ params }: { params: { types: string } }) {
   const Data: any = content[subdomain as keyof typeof content];
   return {
     title: serviceData.title
-      ?.split("[location]")
+      ?.split(ContactInfo.location)
       .join(Data?.name || ContactInfo.location)
       ?.split("[phone]")
       .join(ContactInfo.No),
     description: serviceData.shortDescription
-      ?.split("[location]")
+      ?.split(ContactInfo.location)
       .join(Data?.name || ContactInfo.location)
       ?.split("[phone]")
       .join(ContactInfo.No),

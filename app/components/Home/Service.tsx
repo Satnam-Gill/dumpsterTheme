@@ -30,13 +30,13 @@ const StateName = contentData?.name ? (abbrevation ? `${contentData.name}, ${abb
   return (
     <div className=" px-4  md:px-10">
       <h2 className="text-first text-center text-3xl font-bold text-main  mt-5">
-        {data.title?.split("[location]").join(contentData?.name || ContactInfo.location)
+        {data.title?.split(ContactInfo.location).join(contentData?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
       </h2>
 
       <div
         className="mt-4 px-4  text-center "
-        dangerouslySetInnerHTML={{ __html: data.p?.split("[location]").join(contentData?.name || ContactInfo.location)
+        dangerouslySetInnerHTML={{ __html: data.p?.split(ContactInfo.location).join(contentData?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No) }}
       ></div>
       <div className="mb-10   flex flex-wrap   justify-center gap-10">
@@ -66,14 +66,14 @@ const StateName = contentData?.name ? (abbrevation ? `${contentData.name}, ${abb
             >
               <MdDoubleArrow className="text-bold hidden text-3xl md:block" />
               <Link href={`/services/${items.slug}`}>
-                {items.title?.split("[location]").join(contentData?.name || ContactInfo.location)
+                {items.title?.split(ContactInfo.location).join(contentData?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
               </Link>
             </h3>
             <div
               className=" hidden p-4 text-justify text-base md:block"
               dangerouslySetInnerHTML={{
-                __html: items.description?.split("[location]").join(contentData?.name || ContactInfo.location)
+                __html: items.description?.split(ContactInfo.location).join(contentData?.name || ContactInfo.location)
                 ?.split("[phone]").join(ContactInfo.No),
               }}
             ></div>

@@ -6,8 +6,13 @@ import SubdomainContent from "@/app/Data/FinalContent";
 
 const ContactInfo: any = contactContent.contactContent;
 const data1: any = SubdomainContent.subdomainData;
-const Page = () => {
-  const data: any = data1;
+type Props = { subdomains?: any[] };
+
+const Page = ({ subdomains }: Props) => {
+  // Build a map when subdomains are provided; fallback to static bundle
+  const data: any = subdomains && subdomains.length
+    ? Object.fromEntries(subdomains.map((s: any) => [s.slug || s.name, s]))
+    : data1;
   return (
     <div className="">
       <div>

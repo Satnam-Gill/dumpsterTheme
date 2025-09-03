@@ -30,10 +30,10 @@ export function generateMetadata({ params }: { params: { services: string } }) {
   const Data: any = content[subdomain];
   return {
     title: {
-      absolute: contentData.h1Banner?.split("[location]").join(Data?.name || ContactInfo.location)
+      absolute: contentData.h1Banner?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No),
     },
-    description: contentData.metaDescription?.split("[location]").join(Data?.name || ContactInfo.location)
+    description: contentData.metaDescription?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
     ?.split("[phone]").join(ContactInfo.No),
     alternates: {
       canonical: `https://${Data.slug}.${ContactInfo.host}/services/`,
@@ -60,12 +60,12 @@ const page = () => {
       <NavbarState />
       <div>
         <Banner
-          h1={contentData.h1Banner?.split("[location]").join(Data?.name || ContactInfo.location)
+          h1={contentData.h1Banner?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
           image={contentData.bannerImage}
-          header={contentData.bannerQuote?.split("[location]").join(Data?.name || ContactInfo.location)
+          header={contentData.bannerQuote?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
-          p1={contentData.metaDescription?.split("[location]").join(Data?.name || ContactInfo.location)
+          p1={contentData.metaDescription?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
         />
 

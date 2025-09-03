@@ -33,10 +33,10 @@ export function generateMetadata({ params }: { params: { services: string } }) {
   const Data: any = content[subdomain];
   return {
     title: {
-      absolute: contentData.h1Banner?.split("[location]").join(Data?.name || ContactInfo.location)
+      absolute: contentData.h1Banner?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No),
     },
-    description: contentData.metaDescription?.split("[location]").join(Data?.name || ContactInfo.location)
+    description: contentData.metaDescription?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
     ?.split("[phone]").join(ContactInfo.No),
     alternates: {
       canonical: `https://${Data.slug}.${ContactInfo.host}/contact/`,
@@ -65,11 +65,11 @@ const page = () => {
       <div className="cursor-default w-screen md:w-full text-lg">
         {/* Poster */}
         <Banner
-          h1={contentData.h1Banner?.split("[location]").join(Data?.name || ContactInfo.location)
+          h1={contentData.h1Banner?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
           image={contentData.bannerImage}
           header={contentData?.bannerQuote}
-          p1={contentData.metaDescription?.split("[location]").join(Data?.name || ContactInfo.location)
+          p1={contentData.metaDescription?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
             ?.split("[phone]").join(ContactInfo.No)}
         />
         {/* Poster */}
@@ -89,13 +89,13 @@ const page = () => {
               <div className="flex flex-col justify-center items-center">
                 <div className="w-full">
                   <h2 className="text-3xl mt-4 md:mt-0 font-bold">
-                    {contentData.h2?.split("[location]").join(Data?.name || ContactInfo.location)
+                    {contentData.h2?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
     ?.split("[phone]").join(ContactInfo.No)}
                   </h2>
                 </div>
                 <p
                   className="mt-4 text-justify"
-                  dangerouslySetInnerHTML={{ __html: contentData.p2?.split("[location]").join(Data?.name || ContactInfo.location)
+                  dangerouslySetInnerHTML={{ __html: contentData.p2?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
                     ?.split("[phone]").join(ContactInfo.No) }}
                 ></p>
                 <Link id='cta-id' href={`tel:${ContactInfo.tel}`}>
@@ -133,11 +133,11 @@ const page = () => {
         <div className="grid grid-cols-1 w-full md:grid-cols-2 gap-6 mt-16 md:px-24 px-4 items-center">
           <div className="flex flex-col justify-around w-full gap-3">
             <div>
-              <h2 className="text-3xl font-bold">{contentData?.h3?.split("[location]").join(Data?.name || ContactInfo.location)
+              <h2 className="text-3xl font-bold">{contentData?.h3?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
       ?.split("[phone]").join(ContactInfo.No)}</h2>
               <div
                 className="mt-10 text-justify"
-                dangerouslySetInnerHTML={{ __html: contentData.p3?.split("[location]").join(Data?.name || ContactInfo.location)
+                dangerouslySetInnerHTML={{ __html: contentData.p3?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
                   ?.split("[phone]").join(ContactInfo.No) }}
               ></div>
             </div>
@@ -167,7 +167,7 @@ const page = () => {
           <Link id='cta-id' href={`tel:${ContactInfo.tel}`} className="w-full grid place-items-center">
             <p id='cta-id'
               className="bg-white w-[90%] text-2xl font-semibold text-center rounded-lg m-h-64 p-2 ring ring-main transform hover:shadow-minor group-hover:translate-y-4 hover:shadow-xl transition ease-in duration-300"
-              dangerouslySetInnerHTML={{ __html: contentData.ctaText?.split("[location]").join(Data?.name || ContactInfo.location)
+              dangerouslySetInnerHTML={{ __html: contentData.ctaText?.split(ContactInfo.location).join(Data?.name || ContactInfo.location)
                           ?.split("[phone]").join(ContactInfo.No) }}
             ></p>
           </Link>

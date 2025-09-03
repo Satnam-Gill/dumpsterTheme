@@ -67,21 +67,28 @@ const Footer = () => {
               <div className=" w-fit border-b-2 border-minor text-3xl font-semibold text-main">
                 Our Services
               </div>
-              <div className="mt-6 flex  flex-col gap-2  text-center">
-                {data.lists.map(
+                <div className="mt-6 flex flex-col gap-2 text-center">
+                {data.lists.slice(0, 4).map(
                   (list: any) =>
-                    list.title && (
-                      <Link href={`/services/${list.slug}`} key={list.title}>
-                        <p className="">
-                          {list.title?.replace(
-                            `in ${ContactInfo.location}`,
-                            " ",
-                          )}
-                        </p>
-                      </Link>
-                    ),
+                  list.title && (
+                    <Link href={`/services/${list.slug}`} key={list.title}>
+                    <p className="">
+                      {list.title?.replace(
+                      `in ${ContactInfo.location}`,
+                      "",
+                      )}
+                    </p>
+                    </Link>
+                  ),
                 )}
-              </div>
+                {data.lists.length > 4 && (
+                  <Link href="/services">
+                  <p className="font-semibold text-main underline">
+                    Show More
+                  </p>
+                  </Link>
+                )}
+                </div>
             </div>
             <div className="flex flex-col items-center justify-center shadow-sm md:w-80    ">
               <div className=" w-fit border-b-2 border-minor  text-3xl font-semibold">

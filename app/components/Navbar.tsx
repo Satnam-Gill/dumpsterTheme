@@ -18,6 +18,7 @@ const Navbar = () => {
     "Home",
     "Locations",
     "Services",
+    "Gallery",
     "About",
     "Blogs",
     "Contact",

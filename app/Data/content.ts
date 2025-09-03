@@ -3,6 +3,7 @@ import blogDataJson  from "@/components/Content/blogs.json";
 import blogCategoryMetaJson  from "@/components/Content/blogsCategoryMetas.json";
 import contactPageDataJson  from "@/components/Content/contact.json";
 import contactDataJson from "@/components/Content/ContactInfo.json";
+import galleryDataJson from "@/components/Content/gallery.json";
 import homePageDataJson  from "@/components/Content/home.json";
 import locationPageDataJson   from "@/components/Content/location.json";
 import brandsDataJson  from "@/components/Content/ourBrand.json";
@@ -262,6 +263,31 @@ const typesJsonContent: any = {
   serviceData:typeserviceData,
 };
 
+// Gallery Content
+const {
+  metaTitle: galleryMetaTitle = undefined,
+  metaDescription: galleryMetaDescription = undefined,
+  bannerQuote: galleryBannerQuote = undefined,
+  bannerImage: galleryBannerImage = undefined,
+  h1Banner: galleryH1Banner = undefined,
+  p1Banner: galleryP1Banner = "",
+  galleryIntro = { title: "", description: "" },
+  galleries = [],
+  ctaSection = { title: "", description: "", buttonText: "", phoneText: "" },
+} = (galleryDataJson as any) || {};
+
+const galleryContent: any = {
+  metaTitle: galleryMetaTitle,
+  metaDescription: galleryMetaDescription,
+  bannerQuote: galleryBannerQuote,
+  bannerImage: galleryBannerImage,
+  h1Banner: galleryH1Banner,
+  p1Banner: galleryP1Banner,
+  galleryIntro,
+  galleries,
+  ctaSection,
+};
+
 
 // Utility function to replace placeholders in strings
 function replacePlaceholders(obj: any, ContactInfo: any): any {
@@ -290,6 +316,7 @@ const content: {
   blogContent: any;
   blogCategoryMetaMap: any;
   contactPageContent: any;
+  galleryContent: any;
   homePageContent: any;
   locationPageContent: any;
   brandsContent: any;
@@ -301,6 +328,7 @@ const content: {
   blogContent: replacePlaceholders(blogContent, ContactInfo),
   blogCategoryMetaMap: replacePlaceholders(blogCategoryMetaMap, ContactInfo),
   contactPageContent: replacePlaceholders(contactPageContent, ContactInfo),
+  galleryContent: replacePlaceholders(galleryContent, ContactInfo),
   homePageContent: replacePlaceholders(homePageContent, ContactInfo),
   locationPageContent: replacePlaceholders(locationPageContent, ContactInfo),
   brandsContent: replacePlaceholders(brandsContent, ContactInfo),
