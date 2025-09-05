@@ -7,6 +7,28 @@ import serviceData from "@/components/Content/servicePage.json";
 
 export const dynamic = "force-dynamic";
 
+// Helper function to fetch data from API with fallback
+async function fetchWithFallback<T>(url: string, fallback: T): Promise<T> {
+  try {
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.warn('API fetch failed, using fallback:', error);
+    return fallback;
+  }
+}
+
 // Safely derive the slugs (fallback to [])
 const ServiceSlug: string[] = Array.isArray(serviceData?.serviceData?.lists)
   ? serviceData.serviceData.lists.map((item: any) => String(item?.slug || "").trim()).filter(Boolean)
@@ -40,6 +62,47 @@ export async function GET() {
 
   // If we are on a subdomain: return that subdomain's own URL-set
   if (onSubdomain) {
+    // For API calls, use the main domain (not subdomain) to avoid DNS issues in development
+    let apiBaseUrl;
+    if (host.includes('localhost')) {
+      // In development, always use localhost without subdomain for API calls
+      apiBaseUrl = `${proto}://localhost${port ? `:${port}` : ''}`;
+    } else {
+      // In production, use the main domain (remove subdomain prefix)
+      const mainDomain = hostnameNoPort.split('.').slice(1).join('.');
+      apiBaseUrl = `${proto}://${mainDomain}${port ? `:${port}` : ''}`;
+    }
+    
+    // Fetch subdomain data from API with fallback to static JSON
+    const subdomainData = await fetchWithFallback(
+      `${apiBaseUrl}/api/subdomains`,
+      { subdomains: Object.keys(subdomainMap || {}).map(key => ({ slug: key, ...(subdomainMap as any)[key] })) }
+    );
+
+    // Find current subdomain data
+    const currentSubdomain = (subdomainData.subdomains || []).find((sub: any) => sub.slug === firstLabel);
+    
+    // Generate neighborhood URLs if they exist
+    let neighborhoodURL = '';
+    if (currentSubdomain?.neighbourhoods) {
+      const neighborhoods = currentSubdomain.neighbourhoods
+        .split('|')
+        .map((n: string) => n.trim())
+        .filter(Boolean);
+
+      neighborhoodURL = neighborhoods.map((neighborhood: string) => {
+        const neighborhoodSlug = neighborhood.toLowerCase().replace(/\.+$/, "")
+                          .replace(/\s+/g, "-");
+        return `
+  <url>
+    <loc>${origin}/neighborhoods/${neighborhoodSlug}/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+      }).join('');
+    }
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -65,7 +128,7 @@ export async function GET() {
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-  </url>${ServiceURL}
+  </url>${ServiceURL}${neighborhoodURL}
 </urlset>`;
 
     return new NextResponse(xml, {

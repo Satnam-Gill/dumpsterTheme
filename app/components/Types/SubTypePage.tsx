@@ -19,10 +19,17 @@ const SubTypePage = ({ params }: any) => {
   const headersList = headers();
   const subdomain = headersList.get("x-subdomain");
   const Data: any = content[subdomain as keyof typeof content];
-  const locationName = Data?.name || ContactInfo.location;
+  
+  // Extract abbreviation from subdomain slug
+  const abbreviation = subdomain?.split("-").pop()?.toUpperCase();
+  
+  // Create location name with abbreviation if available
+  const locationName = Data?.name 
+    ? (abbreviation ? `${Data.name}, ${abbreviation}` : Data.name) 
+    : ContactInfo.location;
   const Servicedata = JSON.parse(
     JSON.stringify(data?.serviceData)
-      .split("[location]")
+      .split(ContactInfo.location)
       .join(locationName)
       .split("[phone]")
       .join(ContactInfo.No),

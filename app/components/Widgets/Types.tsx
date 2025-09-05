@@ -11,7 +11,7 @@ const Types = ({value}:{value?:any}) => {
   // console.log(value)
   const data = JSON.parse(
     JSON.stringify(data1.serviceData)
-      .split("[location]")
+      .split(ContactInfo.location)
       .join(value || ContactInfo.location)
       .split("[phone]")
       .join(ContactInfo.No),

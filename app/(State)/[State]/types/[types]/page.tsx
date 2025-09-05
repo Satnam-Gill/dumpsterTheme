@@ -19,15 +19,24 @@ export function generateMetadata({ params }: { params: { types: string } }) {
   const headersList = headers();
   const subdomain = headersList.get("x-subdomain");
   const Data: any = content[subdomain as keyof typeof content];
+  
+  // Extract abbreviation from subdomain slug
+  const abbreviation = subdomain?.split("-").pop()?.toUpperCase();
+  
+  // Create location name with abbreviation if available
+  const locationName = Data?.name 
+    ? (abbreviation ? `${Data.name}, ${abbreviation}` : Data.name) 
+    : ContactInfo.location;
+  
   return {
     title: serviceData.title
-      ?.split("[location]")
-      .join(Data?.name || ContactInfo.location)
+      ?.split(ContactInfo.location)
+      .join(locationName)
       ?.split("[phone]")
       .join(ContactInfo.No),
     description: serviceData.shortDescription
-      ?.split("[location]")
-      .join(Data?.name || ContactInfo.location)
+      ?.split(ContactInfo.location)
+      .join(locationName)
       ?.split("[phone]")
       .join(ContactInfo.No),
     alternates: {
