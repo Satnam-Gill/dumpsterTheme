@@ -1,12 +1,42 @@
+import  ContactInfo  from '@/components/Content/ContactInfo.json';
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import subdomainUrl from "@/components/Content/subDomainUrlContent.json";
 
-export function middleware(request: NextRequest) {
+// Function to fetch subdomain data from API
+async function getSubdomainData() {
+  try {
+    const baseUrl = typeof window !== 'undefined' 
+      ? `${window.location.protocol}//${window.location.host}`
+      :  process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/subdomains`, {
+      cache: 'no-store'
+    });
+    const data = await response.json();
+    
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      return data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
+    }
+    return {};
+  } catch (error) {
+    return {};
+  }
+}
+
+
+export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get("host") || "";
   const subdomain = hostname.split(".")[0];
+  
+  // Fetch subdomain data from API
+  const subdomainUrl = await getSubdomainData();
   const subDomains = Object.keys(subdomainUrl);
   const allowedSubs = Object.keys(subdomainUrl);
 

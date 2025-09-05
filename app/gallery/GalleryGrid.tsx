@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // Lightbox Modal Component
@@ -22,7 +22,7 @@ const Lightbox = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95">
       {/* Close button */}
       <button
         onClick={onClose}
@@ -50,7 +50,7 @@ const Lightbox = ({
       )}
       
       {/* Image */}
-      <div className="relative h-full w-full p-8">
+      <div className="relative h-[90vh] w-full p-8">
         <Image
           src={images[currentIndex]}
           alt={`Gallery image ${currentIndex + 1}`}
@@ -108,13 +108,13 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ galleryData }) => {
     setLightboxOpen(false);
   };
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
-  };
+  }, [allImages.length]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
-  };
+  }, [allImages.length]);
 
   // Handle keyboard navigation
   React.useEffect(() => {
@@ -128,7 +128,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ galleryData }) => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [lightboxOpen]);
+  }, [lightboxOpen, nextImage, prevImage]);
 
   return (
     <>

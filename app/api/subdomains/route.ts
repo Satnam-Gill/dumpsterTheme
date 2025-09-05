@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     today.setHours(0, 0, 0, 0);
     const todayStr = today.toISOString().split('T')[0];
 
-    // Flatten object keyed by slug into array and apply date filter similar to blogs
+    // Convert object to array and apply date filter
     const subdomainsArray = Object.keys(subdomainsObject).map((key) => {
       const item = subdomainsObject[key] || {};
       // Ensure slug present
@@ -64,6 +64,9 @@ export async function GET(request: Request) {
         'Cache-Control': 'no-store, must-revalidate',
         'Pragma': 'no-cache',
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
   } catch (error) {

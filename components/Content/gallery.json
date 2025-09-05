@@ -3,30 +3,6 @@
   "metaDescription": "Browse our photo gallery collection showcasing our work and projects.",
   "galleries": [
     {
-      "id": "before-after",
-      "title": "Before & After",
-      "images": [
-        {
-          "id": "ba1",
-          "beforeImage": "https://images.unsplash.com/photo-1541889419-6bea782d14a2?w=400&h=600&fit=crop",
-          "afterImage": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=600&fit=crop",
-          "title": "Transformation 1"
-        },
-        {
-          "id": "ba2",
-          "beforeImage": "https://images.unsplash.com/photo-1530785602389-07594beb8b73?w=400&h=500&fit=crop",
-          "afterImage": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=500&fit=crop",
-          "title": "Transformation 2"
-        },
-        {
-          "id": "ba3",
-          "beforeImage": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=550&fit=crop",
-          "afterImage": "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=400&h=550&fit=crop",
-          "title": "Transformation 3"
-        }
-      ]
-    },
-    {
       "id": "projects",
       "title": "Our Work",
       "images": [
@@ -67,34 +43,8 @@
         },
         {
           "id": "p8",
-          "image": "https://images.unsplash.com/photo-1585479766345-d4c04cad4e9c?w=400&h=480&fit=crop",
+          "image": "https://images.unsplash.com/photo-1756244834590-b1a32e94df40?w=500&auto=format&fit=crop",
           "title": "Project 8"
-        }
-      ]
-    },
-    {
-      "id": "team",
-      "title": "Our Team & Equipment",
-      "images": [
-        {
-          "id": "t1",
-          "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop",
-          "title": "Equipment 1"
-        },
-        {
-          "id": "t2",
-          "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
-          "title": "Team Member"
-        },
-        {
-          "id": "t3",
-          "image": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop",
-          "title": "Equipment 2"
-        },
-        {
-          "id": "t4",
-          "image": "https://images.unsplash.com/photo-1581094651181-92c98d6b6d40?w=400&h=350&fit=crop",
-          "title": "Mobile Unit"
         }
       ]
     }

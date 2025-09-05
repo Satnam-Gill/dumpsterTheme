@@ -23,8 +23,8 @@ const page = () => {
         <div className="mx-auto max-w-7xl px-4 py-8">
           {/* Simple Header */}
           <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-gray-800">Gallery</h1>
-            <p className="mt-2 text-gray-600">Our work portfolio</p>
+            <h1 className="text-4xl font-bold text-main">Gallery</h1>
+            <p className="mt-2 ">Our work portfolio</p>
           </div>
 
           {/* Gallery Grid Component */}

@@ -12,25 +12,19 @@ import NavbarState from "@/app/components/State/NavbarState";
 import Link from "next/link";
 import ZipAndNeighAccordian from "@/app/components/Home/ZipAndNeighAccordian";
 import Types from "@/app/components/Widgets/Types";
+// import Service from "@/app/Components/Service";
 
 import contactContent from "@/app/Data/content";
+import subdomainContent from "@/app/Data/FinalContent";
 import { headers } from "next/headers";
 
 const ContactInfo: any = contactContent.contactContent;
+const home: any = contactContent.homePageContent;
 
-// Force dynamic behavior similar to blogs page
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-async function getNeighborhoodData() {
-  const headersList = headers();
-  const proto: any = headersList.get("x-forwarded-proto") || "http";
-  const host = headersList.get("host");
-  const baseUrl = `${proto}://${host}`;
-  const res = await fetch(`${baseUrl}/api/neighborhoods`, { cache: "no-store" });
-  return res.json().catch(() => ({}));
-}
-
+// Function to fetch subdomain data from API
 async function getSubdomainData() {
   const headersList = headers();
   const proto: any = headersList.get("x-forwarded-proto") || "http";
@@ -43,7 +37,6 @@ async function getSubdomainData() {
 interface NeighborhoodPageProps {
   params: { State: string; neighborhood: string };
 }
-
 const stateName: Record<string, string> = {
   AL: "Alabama",
   AK: "Alaska",
@@ -99,77 +92,138 @@ const stateName: Record<string, string> = {
 
 export async function generateMetadata({ params }: NeighborhoodPageProps) {
   const { State, neighborhood } = params;
+
+  // Fetch content from API
+  let content: any = {};
   try {
-    const data = await getNeighborhoodData();
-    const list: any[] = data?.neighborhoods || [];
-    const current = list.find((item: any) => item?.slug === neighborhood);
-    const title = current?.metaTitle
-      ?.split(ContactInfo.location)
-      .join(current?.name || ContactInfo.location)
-      ?.split("[phone]")
-      .join(ContactInfo.No);
-    const description = current?.metaDescription
-      ?.split(ContactInfo.location)
-      .join(current?.name || ContactInfo.location)
-      ?.split("[phone]")
-      .join(ContactInfo.No);
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: `https://${State}.${ContactInfo.host}/neighborhoods/${neighborhood}`,
-      },
-    } as any;
+    const data = await getSubdomainData();
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
+    }
   } catch (e) {
-    return {
-      alternates: {
-        canonical: `https://${State}.${ContactInfo.host}/neighborhoods/${neighborhood}`,
-      },
-    } as any;
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
   }
+  const cityData: any = content;
+  const parentCityData = cityData[State];
+  
+  // Format neighborhood name for display
+  const neighborhoodName = neighborhood
+  .split("-")
+  .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+  const staetName = State
+  .split("-")
+  .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+  
+  // Create neighborhood-specific metadata using parent city data
+  const title =
+    parentCityData?.metaTitle
+      ?.split(content[State].name)
+      .join(neighborhoodName)
+      ?.split("[phone]")
+      .join(ContactInfo.No) ||
+    `${ContactInfo.service} in ${neighborhoodName} - Call ${ContactInfo.No}`;
+
+  const description =
+    parentCityData?.metaDescription
+      ?.split(content[State].name)
+      .join(neighborhoodName)
+      ?.split("[phone]")
+      .join(ContactInfo.No) ||
+    `Professional ${ContactInfo.service} in ${neighborhoodName}. Fast delivery, competitive pricing, and reliable service. Call ${ContactInfo.No} for your dumpster rental needs.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://${State}.${ContactInfo.host}/neighborhoods/${neighborhood}/`,
+    },
+  };
 }
 
-export default async function NeighborhoodPage({ params }: NeighborhoodPageProps) {
+export default async function NeighborhoodPage({
+  params,
+}: NeighborhoodPageProps) {
   const { State, neighborhood } = params;
-  const abbrevations: any = State.split("-").pop();
 
-  // Prefer dynamically fetched neighborhood content
-  let fetched: any = null;
-  let fetchedList: any[] = [];
-  let parentStateData: any = null;
+  // Fetch content from API
+  let content: any = {};
   try {
-    const [neighborhoodData, subdomainData] = await Promise.all([
-      getNeighborhoodData(),
-      getSubdomainData()
-    ]);
-    
-    if (neighborhoodData && neighborhoodData.neighborhoods) {
-      fetchedList = neighborhoodData.neighborhoods;
-      fetched = neighborhoodData.neighborhoods.find((item: any) => item?.slug === neighborhood);
-      if (!fetched) notFound();
-    }
-    
-    if (subdomainData && subdomainData.subdomains) {
-      parentStateData = subdomainData.subdomains.find((item: any) => item?.slug === State);
+    const data = await getSubdomainData();
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
     }
   } catch (e) {
-    // If API fails, do not render unpublished content
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
+  }
+
+  const cityData: any = content;
+  const abbrevations: any = State.split("-").pop();
+
+  // Validate subdomain
+  const subDomain = Object.keys(cityData);
+  const validSubdomains = subDomain;
+  if (!validSubdomains.includes(State)) {
     notFound();
   }
 
-  const sourceContent = fetched;
+  // Get parent city data
+  const parentCityData = cityData[State];
+  
+  // Validate neighborhood exists in the city's neighborhoods list
+  if (!parentCityData?.neighbourhoods) {
+    notFound();
+  }
+  
+  const validNeighborhoods = parentCityData.neighbourhoods
+    .split("|")
+    .map((n: string) => n.trim().toLowerCase().replace(/\.+$/, "").replace(/\s+/g, "-"));
+  
+  if (!validNeighborhoods.includes(neighborhood)) {
+    notFound();
+  }
+
+  // Format neighborhood name for display
+  const neighborhoodName = neighborhood
+    .split("-")
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  const stateName = State
+    .split("-")
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
   const ContentData = JSON.parse(
-    JSON.stringify(sourceContent)
-      .split(ContactInfo.location)
-      .join(ContactInfo.location)
+    JSON.stringify(parentCityData)
+      .split("[location]")
+      .join(neighborhoodName)
       .split("[phone]")
-      .join(ContactInfo.No),
+      .join(ContactInfo.No)
+      .split(parentCityData?.name || State)
+      .join(neighborhoodName),
   );
 
-  // Get related neighborhoods from the same parent state
-  const relatedNeighborhoods = (fetchedList || [])
-    .filter((item: any) => item?.parentState === State && item?.slug !== neighborhood)
-    .map((item: any) => item);
+  // Update specific fields for neighborhood
+  ContentData.name = neighborhoodName;
+  ContentData.slug = neighborhood;
+
+  const slugs: any = Object.keys(cityData)
+    .filter((key) => key !== State)
+    .map((key) => cityData[key]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -182,9 +236,9 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
         address: {
           "@type": "PostalAddress",
           streetAddress: `${stateName[abbrevations.toUpperCase()]} ${ContactInfo.service}`,
-          addressLocality: `${ContentData?.name}, ${parentStateData?.name || State}, ${abbrevations.toUpperCase()}`,
+          addressLocality: `${ContentData?.name}, ${abbrevations.toUpperCase()}`,
           addressRegion: stateName[abbrevations.toUpperCase()],
-          postalCode: ContentData?.zipCodes || "",
+          postalCode: "",
           addressCountry: "US",
         },
         review: {
@@ -210,13 +264,13 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
       {
         "@context": "https://schema.org",
         "@type": "Product",
-        name: `${ContactInfo.service} in ${ContentData?.name}, ${parentStateData?.name || State}, ${abbrevations.toUpperCase()}`,
+        name: `${ContactInfo.service} in ${ContentData?.name}, ${abbrevations.toUpperCase()}`,
         brand: {
           "@type": "Brand",
-          name: `${ContactInfo.service} ${ContentData?.name}, ${parentStateData?.name || State}, ${abbrevations.toUpperCase()} Pros`,
+          name: `${ContactInfo.service} ${ContentData?.name}, ${abbrevations.toUpperCase()} Pros`,
         },
         description: `${ContentData?.metaDescription
-          ?.split(ContactInfo.location)
+          ?.split("[location]")
           .join(ContentData?.name || ContactInfo.location)
           ?.split("[phone]")
           .join(ContactInfo.No)}`,
@@ -229,14 +283,15 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
       },
       {
         "@type": "FAQPage",
-        mainEntity: ContentData.faq.map((faq: any) => ({
-          "@type": "Question",
-          name: faq?.ques?.split(ContactInfo.location).join(neighborhood),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq?.ans?.split(ContactInfo.location).join(neighborhood),
-          },
-        })),
+        mainEntity:
+          ContentData.faq?.map((faq: any) => ({
+            "@type": "Question",
+            name: faq?.ques?.split("[location]").join(neighborhoodName),
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq?.ans?.split("[location]").join(neighborhoodName),
+            },
+          })) || [],
       },
     ],
   };
@@ -255,16 +310,14 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
       <div className="mx-auto max-w-[2100px] overflow-hidden">
         <Banner
           h1={`${ContentData.h1Banner
-            ?.split(ContactInfo.location)
+            ?.split("[location]")
             .join(ContentData?.name || ContactInfo.location)
             ?.split("[phone]")
-            .join(
-              ContactInfo.No,
-            )} ${ContentData.zipCodes && ContentData.zipCodes.split("|")[0]}`}
+            .join(ContactInfo.No)}`}
           image={ContentData.bannerImage}
           header={ContentData.bannerQuote}
           p1={`${ContentData?.metaDescription
-            ?.split(ContactInfo.location)
+            ?.split("[location]")
             .join(ContentData?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(ContactInfo.No)}.`}
@@ -299,7 +352,8 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
                 </h4>
                 <p>
                   Professional Residential {ContactInfo.service} in{" "}
-                  {ContentData?.name}, {parentStateData?.name || State}, {State.split("-").pop()?.toUpperCase()}.
+                  {ContentData?.name}, {parentCityData?.name || State},{" "}
+                  {State.split("-").pop()?.toUpperCase()}.
                 </p>
               </div>
               <div className="rounded-lg bg-gray-100 p-4 shadow-lg">
@@ -308,7 +362,8 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
                 </h4>
                 <p>
                   Commercial {ContactInfo.service} in {ContentData?.name},{" "}
-                  {parentStateData?.name || State}, {State.split("-").pop()?.toUpperCase()}.
+                  {parentCityData?.name || State},{" "}
+                  {State.split("-").pop()?.toUpperCase()}.
                 </p>
               </div>
             </div>
@@ -330,10 +385,42 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
         <div className="mt-14 md:mt-20">
           <Service value={State} />
           <Types
-            value={`${ContentData?.name}, ${parentStateData?.name || State}, ${abbrevations.toUpperCase()}`}
+            value={`${ContentData?.name}, ${abbrevations.toUpperCase()}`}
           />
         </div>
         {/* Service */}
+        {/* Needs */}
+        {ContentData?.needsSection ? (
+          <div className="mt-14 w-full px-6 md:mt-28 md:px-24">
+            <h2 className="text-first text-center text-3xl font-extrabold">
+              {ContentData?.needsSection.title}
+            </h2>
+            <p
+              className="mt-4 text-center text-lg"
+              dangerouslySetInnerHTML={{
+                __html: ContentData?.needsSection.description,
+              }}
+            ></p>
+            <div className="event mt-6 grid grid-cols-1 gap-5 text-center sm:grid-cols-2 md:gap-16 md:px-20 lg:grid-cols-3">
+              {ContentData?.needsSection.needslist.map(
+                (item: any, index: any) => {
+                  return (
+                    <div
+                      className=" 1 rounded-md border p-4 shadow-md "
+                      key={index}
+                    >
+                      <div className="1 text-center text-xl font-bold text-minor">
+                        {item.title}
+                      </div>
+                      <div className="mt-4 text-lg">{item.description}</div>
+                    </div>
+                  );
+                },
+              )}
+            </div>
+          </div>
+        ) : null}
+        {/* Needs  */}
         <div className="mt-10">
           <Affordable />
         </div>
@@ -405,6 +492,64 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
           </div>
         )}
         {/* Section 3 */}
+        {/* Pricing Section */}
+        {ContentData?.pricingSection ? (
+          <div className="mt-14 px-6 md:mt-28 md:px-24">
+            <h2 className=" text-3xl font-bold">
+              {ContentData?.pricingSection.title}
+            </h2>
+            <div
+              className="mt-4 text-lg"
+              dangerouslySetInnerHTML={{
+                __html: ContentData?.pricingSection.description,
+              }}
+            ></div>
+            <div className="mt-10 grid grid-cols-1  gap-6 md:grid-cols-2">
+              {ContentData?.pricingSection.list.map((item: any, index: any) => {
+                return (
+                  <div
+                    className=" 1 rounded-md border p-4 shadow-md"
+                    key={index}
+                  >
+                    <div className="1 text-center text-lg font-bold ">
+                      {item.title}
+                    </div>
+                    <div
+                      className="my-4"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+        {/* Pricing Section */}
+        {/* Season Section */}
+        {ContentData?.seasonSection ? (
+          <div className="mt-14 px-6 md:mt-28 md:px-24">
+            <h2 className=" text-center text-3xl font-bold">
+              {ContentData.seasonSection.ttile}
+            </h2>
+            <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
+              {ContentData?.seasonSection.list.map((item: any, index: any) => {
+                return (
+                  <div
+                    className="rounded-xl border px-10 py-4 shadow-lg"
+                    key={index}
+                  >
+                    <div className="text-2xl font-semibold">{item.title}</div>
+                    <div
+                      className="mt-2"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+        {/* Season Section */}
         <ProcessWidget />
         {/* Cta */}
         <div className="mt-14 md:mt-28">
@@ -438,38 +583,91 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
           </div>
         )}
         {/* History */}
-        {/* Related Neighborhoods */}
-        {relatedNeighborhoods.length > 0 && (
-          <div id="related-neighborhoods" className="pt-14 md:pt-28">
-            <h2 className={`  text-center text-3xl font-bold text-main`}>
-              Other Neighborhoods We Serve in {parentStateData?.name || State}
-            </h2>
+        {/* Top Sight */}
+        {ContentData?.topSight ? (
+          <div className="mt-14 md:mt-28">
+            <h2 className={`  text-center text-3xl font-bold`}>Top Sights</h2>
             <div className="mt-10 grid gap-6 px-6 text-center sm:grid-cols-2 md:px-40 lg:grid-cols-3">
-              {relatedNeighborhoods.map((item: any) => (
-                <div className="rounded-xl p-4 shadow-lg" key={item.slug}>
+              {ContentData?.topSight.map((item: any) => (
+                <div className="rounded-xl p-4 shadow-lg" key={item}>
+                  <div className="">
+                    {/* <Image
+                      src={`/${item?.image}`}
+                      alt={item?.name}
+                      width={900}
+                      height={950}
+                      className="h-60 w-full object-cover "
+                    /> */}
+                  </div>
                   <div className="">
                     <div className={` text-center font-bold`}>
                       <br />
                       {item?.name}
                     </div>
-                    <div className="mt-2">
-                      <Link
-                        href={`/neighborhoods/${item.slug}`}
-                        className="text-main hover:underline"
-                      >
-                        View Services →
-                      </Link>
-                    </div>
+                    <div className=""> {item?.description}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+        ) : null}
+        {/* Top Sight */}
+        {/* Area we Serve */}
+        {slugs.length > 0 && (
+          <div id="area-we-serve" className="pt-14 md:pt-28">
+            <h2 className={`  text-center text-3xl font-bold text-main`}>
+              Cities We Serve{" "}
+            </h2>
+            <AreaWeServe slugs={slugs} />
+          </div>
         )}
-        {/* Related Neighborhoods */}
+        {/* Neighborhood */}
+        {ContentData?.neighbourhoods ? (
+          <div className="">
+            <div className="block border px-4 md:hidden">
+              <ZipAndNeighAccordian
+                ques={`Neighborhoods we serve in  ${ContentData?.name}`}
+                ans={ContentData?.neighbourhoods?.split("|")}
+                slug={State}
+              />
+            </div>
+            <div className="mt-28 hidden items-center justify-start md:mx-40 md:block ">
+              <div className="text-center text-3xl font-bold">
+                <p className="text-main">
+                  Neighborhoods we serve in {ContentData?.name}
+                </p>
+              </div>
+              <div className="mx-10 mt-4 flex h-fit w-auto flex-wrap justify-center gap-4">
+                {ContentData?.neighbourhoods?.split("|").map((item: any) => (
+                  <div className="" key={item}>
+                    <Link
+                      href={`/neighborhoods/${
+                        item
+                          .trim()
+                          .toLowerCase()
+                          .replace(/\.+$/, "") // remove trailing dots
+                          .replace(/\s+/g, "-") // replace spaces with hyphens
+                      }`}
+                    >
+                      <p className="border bg-minor px-2 py-1 text-white duration-100 ease-in-out hover:text-main">
+                        {item}
+                      </p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : null}
+        {/* Neighborhood */}
         {/* FAQ */}
-        {ContentData?.faq ? <Faq data={ContentData?.faq} value={`${ContentData.name}, ${parentStateData?.name || State}, ${abbrevations.toUpperCase()}`}/> : null}
-        
+        {ContentData?.faq ? (
+          <Faq
+            data={ContentData?.faq}
+            value={`${ContentData.name}, ${abbrevations.toUpperCase()}`}
+          />
+        ) : null}
+
         {/* FAQ */}
         {/* Reviews */}
         <ReviewWidget value={State} />
@@ -481,7 +679,7 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
               title="Google Map"
               height="350"
               width={"100%"}
-              src={`https://maps.google.com/maps?q=${ContentData?.address || ContentData?.name}+${parentStateData?.name || State}+USA&t=&z=7&ie=UTF8&iwloc=&output=embed`}
+              src={`https://maps.google.com/maps?q=${ContentData?.slug}+USA&t=&z=7&ie=UTF8&iwloc=&output=embed`}
               loading="lazy"
             ></iframe>
           </div>
@@ -492,8 +690,39 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
   );
 }
 
-export function generateStaticParams() {
-  // This would need to be populated with actual neighborhood data
-  // For now, return empty array to let Next.js handle dynamic generation
-  return [];
+export async function generateStaticParams() {
+  let content: any = {};
+  try {
+    const data = await getSubdomainData();
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
+    }
+  } catch (e) {
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
+  }
+
+  const cityData: any = content;
+  const neighborhoods: any[] = [];
+
+  // Extract neighborhoods only from cities that have valid slugs and neighborhoods
+  Object.values(cityData).forEach((city: any) => {
+    if (city.slug && city.neighbourhoods) {
+      const cityNeighborhoods = city.neighbourhoods
+        .split("|")
+        .map((neighName: string) => ({
+          State: city.slug,
+          neighborhood: neighName.trim().toLowerCase().replace(/\s+/g, "-").replace(/\.+$/, ""),
+        }));
+      neighborhoods.push(...cityNeighborhoods);
+    }
+  });
+
+  return neighborhoods;
 }

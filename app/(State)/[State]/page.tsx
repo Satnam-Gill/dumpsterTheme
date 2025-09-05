@@ -19,12 +19,12 @@ import subdomainContent from "@/app/Data/FinalContent";
 import { headers } from "next/headers";
 
 const ContactInfo: any = contactContent.contactContent;
-const content: any = subdomainContent.subdomainData;
+const home: any = contactContent.homePageContent;
 
-// Force dynamic behavior similar to blogs page
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+// Function to fetch subdomain data from API
 async function getSubdomainData() {
   const headersList = headers();
   const proto: any = headersList.get("x-forwarded-proto") || "http";
@@ -89,68 +89,91 @@ const stateName: Record<string, string> = {
   WI: "Wisconsin",
   WY: "Wyoming",
 };
+
 export async function generateMetadata({ params }: SubdomainPageProps) {
   const { State } = params;
+
+  // Fetch content from API
+  let content: any = {};
   try {
     const data = await getSubdomainData();
-    const list: any[] = data?.subdomains || [];
-    const current = list.find((item: any) => item?.slug === State);
-    const title = current?.metaTitle
-      ?.split(ContactInfo.location)
-      .join(current?.name || ContactInfo.location)
-      ?.split("[phone]")
-      .join(ContactInfo.No);
-    const description = current?.metaDescription
-      ?.split(ContactInfo.location)
-      .join(current?.name || ContactInfo.location)
-      ?.split("[phone]")
-      .join(ContactInfo.No);
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: `https://${State}.${ContactInfo.host}`,
-      },
-    } as any;
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
+    }
   } catch (e) {
-    return {
-      alternates: {
-        canonical: `https://${State}.${ContactInfo.host}`,
-      },
-    } as any;
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
   }
+
+  const cityData: any = content;
+  const ContentData = cityData[State];
+
+  return {
+    title: ContentData?.metaTitle
+      ?.split("[location]")
+      .join(ContentData?.name || ContactInfo.location)
+      ?.split("[phone]")
+      .join(ContactInfo.No),
+    description: ContentData?.metaDescription
+      ?.split("[location]")
+      .join(ContentData?.name || ContactInfo.location)
+      ?.split("[phone]")
+      .join(ContactInfo.No),
+    alternates: {
+      canonical: `https://${State}.${ContactInfo.host}`,
+    },
+  };
 }
 export default async function SubdomainPage({ params }: SubdomainPageProps) {
   // console.log(params)
   const { State } = params;
-  const abbrevations: any = State.split("-").pop();
 
-  // Prefer dynamically fetched subdomain content filtered by publishedAt
-  let fetched: any = null;
-  let fetchedList: any[] = [];
+  // Fetch content from API
+  let content: any = {};
   try {
     const data = await getSubdomainData();
     if (data && data.subdomains) {
-      fetchedList = data.subdomains;
-      fetched = data.subdomains.find((item: any) => item?.slug === State);
-      if (!fetched) notFound();
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
     }
   } catch (e) {
-    // If API fails, do not render unpublished content
-    notFound();
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
   }
 
-  const sourceContent = fetched;
+  const cityData: any = content;
+  const abbrevations: any = State.split("-").pop();
+
+  // console.log(State)
+  // Validate subdomain
+  const subDomain = Object.keys(cityData);
+  const validSubdomains = subDomain;
+  if (!validSubdomains.includes(State)) {
+    notFound();
+  }
+  // nity or db query us particular subdomain read data from database .... neeche theme nu pass hoyega and page render hojaega
+  // Render subdomain-specific content
   const ContentData = JSON.parse(
-    JSON.stringify(sourceContent)
-      .split(ContactInfo.location)
+    JSON.stringify(cityData[State])
+      .split("[location]")
       .join(ContactInfo.location)
       .split("[phone]")
       .join(ContactInfo.No),
   );
-  const slugs: any = (fetchedList || [])
-    .filter((item: any) => item?.slug !== State)
-    .map((item: any) => item);
+  const slugs: any = Object.keys(cityData)
+    .filter((key) => key !== State)
+    .map((key) => cityData[key]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -197,7 +220,7 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
           name: `${ContactInfo.service} ${ContentData?.name}, ${abbrevations.toUpperCase()} Pros`,
         },
         description: `${ContentData?.metaDescription
-          ?.split(ContactInfo.location)
+          ?.split("[location]")
           .join(ContentData?.name || ContactInfo.location)
           ?.split("[phone]")
           .join(ContactInfo.No)}`,
@@ -212,16 +235,15 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
         "@type": "FAQPage",
         mainEntity: ContentData.faq.map((faq: any) => ({
           "@type": "Question",
-          name: faq?.ques?.split(ContactInfo.location).join(State),
+          name: faq?.ques?.split("[location]").join(State),
           acceptedAnswer: {
             "@type": "Answer",
-            text: faq?.ans?.split(ContactInfo.location).join(State),
+            text: faq?.ans?.split("[location]").join(State),
           },
         })),
       },
     ],
   };
-
 
   return (
     <div className="">
@@ -237,7 +259,7 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
       <div className="mx-auto max-w-[2100px] overflow-hidden">
         <Banner
           h1={`${ContentData.h1Banner
-            ?.split(ContactInfo.location)
+            ?.split("[location]")
             .join(ContentData?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(
@@ -246,7 +268,7 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
           image={ContentData.bannerImage}
           header={ContentData.bannerQuote}
           p1={`${ContentData?.metaDescription
-            ?.split(ContactInfo.location)
+            ?.split("[location]")
             .join(ContentData?.name || ContactInfo.location)
             ?.split("[phone]")
             .join(ContactInfo.No)}.`}
@@ -559,7 +581,6 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
                 ques={`Neighborhoods we serve in  ${ContentData?.name}`}
                 ans={ContentData?.neighbourhoods?.split("|")}
                 slug={ContentData?.slug}
-                isNeighborhood={true}
               />
             </div>
             <div className="mt-28 hidden items-center justify-start md:mx-40 md:block ">
@@ -569,21 +590,23 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
                 </p>
               </div>
               <div className="mx-10 mt-4 flex h-fit w-auto flex-wrap justify-center gap-4">
-                {ContentData?.neighbourhoods?.split("|").map((item: any) => {
-                  // Create neighborhood slug from item name and state
-                  const neighborhoodSlug = item.toLowerCase().replace(/\s+/g, '-') + '-' + ContentData?.slug;
-                  return (
-                    <div className="" key={item}>
-                      <Link
-                        href={`/neighborhoods/${neighborhoodSlug}`}
-                      >
-                        <p className="border bg-minor px-2 py-1 text-white duration-100 ease-in-out hover:text-main">
-                          {item}
-                        </p>
-                      </Link>
-                    </div>
-                  );
-                })}
+                {ContentData?.neighbourhoods?.split("|").map((item: any) => (
+                  <div className="" key={item}>
+                    <Link
+                      href={`/neighborhoods/${
+                        item
+                          .trim()
+                          .toLowerCase()
+                          .replace(/\.+$/, "") // remove trailing dots
+                          .replace(/\s+/g, "-") // replace spaces with hyphens
+                      }`}
+                    >
+                      <p className="border bg-minor px-2 py-1 text-white duration-100 ease-in-out hover:text-main">
+                        {item}
+                      </p>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -624,8 +647,13 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
         ) : null}
         {/* Zip */}
         {/* FAQ */}
-        {ContentData?.faq ? <Faq data={ContentData?.faq} value={`${ContentData.name}, ${abbrevations.toUpperCase()}`}/> : null}
-        
+        {ContentData?.faq ? (
+          <Faq
+            data={ContentData?.faq}
+            value={`${ContentData.name}, ${abbrevations.toUpperCase()}`}
+          />
+        ) : null}
+
         {/* FAQ */}
         {/* CounterCta */}
         {/* CounterCta */}
@@ -650,7 +678,24 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
   );
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  let content: any = {};
+  try {
+    const data = await getSubdomainData();
+    if (data && data.subdomains) {
+      // Convert array back to object with slug as key
+      content = data.subdomains.reduce((acc: any, item: any) => {
+        if (item.slug) {
+          acc[item.slug] = item;
+        }
+        return acc;
+      }, {});
+    }
+  } catch (e) {
+    // Fallback to static content if API fails
+    content = subdomainContent.subdomainData;
+  }
+
   const cityData: any = content;
   const subDomain = Object.keys(cityData);
   return subDomain.map((locations: any) => ({
